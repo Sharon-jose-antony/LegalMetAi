@@ -1,0 +1,192 @@
+[
+  {
+    "rule_id": "LM-PCR-2011-R6-1-A",
+    "declaration": "MANUFACTURER_PACKER_IMPORTER",
+    "requirement": "Every pre-packaged commodity shall bear a declaration of the name and address of the manufacturer, packer, or importer, as applicable.",
+    "applicability": {
+      "all_categories": true,
+      "packaged_food": "MANDATORY",
+      "cosmetics": "MANDATORY",
+      "household_commodity": "MANDATORY",
+      "condition": "Required on all pre-packaged commodities without exception."
+    },
+    "validation_logic": "extract_manufacturer_packer_importer",
+    "severity": "HIGH",
+    "legal_reference": "Rule 6(1)(a), Legal Metrology (Packaged Commodities) Rules, 2011",
+    "source_document": "Legal Metrology (Packaged Commodities) Rules, 2011 (as amended)",
+    "source_date_version": "GSR 779(E) / Consolidated",
+    "official_source_url": "https://consumeraffairs.gov.in/index.php/pages/legal-metrology-act",
+    "notes": "Must include full postal address with PIN code. For imported goods, the importer's Indian address is required in addition to the foreign manufacturer."
+  },
+  {
+    "rule_id": "LM-PCR-2011-R6-1-AA",
+    "declaration": "COUNTRY_OF_ORIGIN",
+    "requirement": "For imported commodities, a declaration of the country of origin or manufacture or assembly, as the case may be, shall be made on the package.",
+    "applicability": {
+      "all_categories": false,
+      "packaged_food": "CONDITIONAL",
+      "cosmetics": "CONDITIONAL",
+      "household_commodity": "CONDITIONAL",
+      "condition": "Mandatory ONLY if the product is imported, manufactured, or assembled outside India. Not applicable to domestically manufactured products."
+    },
+    "validation_logic": "extract_country_of_origin",
+    "severity": "HIGH",
+    "legal_reference": "Rule 6(1)(aa), Legal Metrology (Packaged Commodities) Rules, 2011 (inserted by amendment)",
+    "source_document": "Legal Metrology (Packaged Commodities) (Amendment) Rules",
+    "source_date_version": "GSR 779(E) / Consolidated",
+    "official_source_url": "https://consumeraffairs.gov.in/index.php/pages/legal-metrology-act",
+    "notes": "The system will apply this rule only when 'is_imported' flag is set or importer address is detected. Otherwise marks as NOT_APPLICABLE."
+  },
+  {
+    "rule_id": "LM-PCR-2011-R6-1-B",
+    "declaration": "COMMON_GENERIC_NAME",
+    "requirement": "Every pre-packaged commodity shall bear the common or generic name of the commodity.",
+    "applicability": {
+      "all_categories": true,
+      "packaged_food": "MANDATORY",
+      "cosmetics": "MANDATORY",
+      "household_commodity": "MANDATORY",
+      "condition": "Required on all pre-packaged commodities."
+    },
+    "validation_logic": "extract_generic_name",
+    "severity": "HIGH",
+    "legal_reference": "Rule 6(1)(b), Legal Metrology (Packaged Commodities) Rules, 2011",
+    "source_document": "Legal Metrology (Packaged Commodities) Rules, 2011 (as amended)",
+    "source_date_version": "GSR 779(E) / Consolidated",
+    "official_source_url": "https://consumeraffairs.gov.in/index.php/pages/legal-metrology-act",
+    "notes": "Must allow consumer to identify the commodity. Brand name alone does not satisfy this requirement."
+  },
+  {
+    "rule_id": "LM-PCR-2011-R6-1-C",
+    "declaration": "NET_QUANTITY",
+    "requirement": "Every pre-packaged commodity shall bear the net quantity, in terms of standard units of weights and measures, of the commodity contained in the package.",
+    "applicability": {
+      "all_categories": true,
+      "packaged_food": "MANDATORY",
+      "cosmetics": "MANDATORY",
+      "household_commodity": "MANDATORY",
+      "condition": "Required on all pre-packaged commodities. Units must follow the Second Schedule of the Legal Metrology Act."
+    },
+    "validation_logic": "extract_net_quantity",
+    "severity": "HIGH",
+    "legal_reference": "Rule 6(1)(c), Legal Metrology (Packaged Commodities) Rules, 2011; Second Schedule, Legal Metrology Act, 2009",
+    "source_document": "Legal Metrology (Packaged Commodities) Rules, 2011 (as amended)",
+    "source_date_version": "GSR 779(E) / Consolidated",
+    "official_source_url": "https://consumeraffairs.gov.in/index.php/pages/legal-metrology-act",
+    "notes": "Standard units: g, kg, ml, L, m, cm, number (Nos.). Abbreviations must be standard. Approximate quantities ('approx.', 'about') may not be permitted without specific provision."
+  },
+  {
+    "rule_id": "LM-PCR-2011-R6-1-D-DATE",
+    "declaration": "MONTH_YEAR_OF_MANUFACTURE",
+    "requirement": "Every pre-packaged commodity shall bear the month and year in which the commodity is manufactured or packed or imported, as the case may be.",
+    "applicability": {
+      "all_categories": true,
+      "packaged_food": "MANDATORY",
+      "cosmetics": "MANDATORY",
+      "household_commodity": "MANDATORY",
+      "condition": "Required on all pre-packaged commodities."
+    },
+    "validation_logic": "extract_manufacture_date",
+    "severity": "HIGH",
+    "legal_reference": "Rule 6(1)(d), Legal Metrology (Packaged Commodities) Rules, 2011",
+    "source_document": "Legal Metrology (Packaged Commodities) Rules, 2011 (as amended)",
+    "source_date_version": "GSR 779(E) / Consolidated",
+    "official_source_url": "https://consumeraffairs.gov.in/index.php/pages/legal-metrology-act",
+    "notes": "Format: MM/YYYY or Month YYYY. Acceptable abbreviations: Mfg., Mfd., Packed, Imported. Full date is acceptable if month and year are clearly present."
+  },
+  {
+    "rule_id": "LM-PCR-2011-R6-1-D-EXPIRY",
+    "declaration": "BEST_BEFORE_EXPIRY_DATE",
+    "requirement": "For commodities with a defined shelf life or which are perishable, a declaration of 'Best Before' or 'Use By' or 'Expiry Date' shall be made.",
+    "applicability": {
+      "all_categories": false,
+      "packaged_food": "MANDATORY",
+      "cosmetics": "CONDITIONAL",
+      "household_commodity": "NOT_APPLICABLE",
+      "condition": "Mandatory for all packaged food commodities. Conditional for cosmetics/personal care products with shelf life of 30 months or less (PAO symbol may apply). Not applicable for durable household commodities."
+    },
+    "validation_logic": "extract_expiry_date",
+    "severity": "HIGH",
+    "legal_reference": "Rule 6(1)(d), Legal Metrology (Packaged Commodities) Rules, 2011; Food Safety and Standards (Labelling and Display) Regulations, 2020 (for food items)",
+    "source_document": "Legal Metrology (Packaged Commodities) Rules, 2011 (as amended)",
+    "source_date_version": "GSR 779(E) / Consolidated",
+    "official_source_url": "https://consumeraffairs.gov.in/index.php/pages/legal-metrology-act",
+    "notes": "Accepted labels: 'Best Before', 'BB', 'Use By', 'Expiry Date', 'Exp.'. System marks as NOT_APPLICABLE for household commodities."
+  },
+  {
+    "rule_id": "LM-PCR-2011-R6-1-E",
+    "declaration": "MRP",
+    "requirement": "Every pre-packaged commodity shall bear the maximum retail price (inclusive of all taxes) at which the commodity in the package may be sold to the ultimate consumer.",
+    "applicability": {
+      "all_categories": true,
+      "packaged_food": "MANDATORY",
+      "cosmetics": "MANDATORY",
+      "household_commodity": "MANDATORY",
+      "condition": "Required on all pre-packaged commodities intended for retail sale."
+    },
+    "validation_logic": "extract_mrp",
+    "severity": "HIGH",
+    "legal_reference": "Rule 6(1)(e), Legal Metrology (Packaged Commodities) Rules, 2011",
+    "source_document": "Legal Metrology (Packaged Commodities) Rules, 2011 (as amended)",
+    "source_date_version": "GSR 779(E) / Consolidated",
+    "official_source_url": "https://consumeraffairs.gov.in/index.php/pages/legal-metrology-act",
+    "notes": "Must state 'inclusive of all taxes' or 'incl. of all taxes'. Currency: ₹ or Rs. accepted. Printed MRP must match or exceed any promotional price sticker placed on the package."
+  },
+  {
+    "rule_id": "LM-PCR-AMENDMENT-USP",
+    "declaration": "UNIT_SALE_PRICE",
+    "requirement": "For packages where net quantity exceeds 1 kilogram or 1 litre, or for multi-unit packages, the unit sale price (price per standard unit of measurement) shall be declared.",
+    "applicability": {
+      "all_categories": false,
+      "packaged_food": "CONDITIONAL",
+      "cosmetics": "CONDITIONAL",
+      "household_commodity": "CONDITIONAL",
+      "condition": "Applicable for packages where the net content exceeds 1 kg or 1 litre, or multi-piece packages. Check amendment GSR 779(E) for current thresholds."
+    },
+    "validation_logic": "extract_unit_sale_price",
+    "severity": "MEDIUM",
+    "legal_reference": "Legal Metrology (Packaged Commodities) Amendment Rules (GSR 779(E))",
+    "source_document": "Legal Metrology (Packaged Commodities) Amendment Rules",
+    "source_date_version": "GSR 779(E)",
+    "official_source_url": "https://consumeraffairs.gov.in/index.php/pages/legal-metrology-act",
+    "notes": "The exact threshold conditions for USP applicability should be verified against the latest official gazette. System marks as CONDITIONAL and applies heuristically based on detected net quantity. System flags MANUAL_REVIEW if net quantity is borderline."
+  },
+  {
+    "rule_id": "LM-PCR-2011-R6-1-F",
+    "declaration": "CONSUMER_CARE_DETAILS",
+    "requirement": "Every pre-packaged commodity shall bear the name, address and telephone number or toll-free number and email address of the consumer care, where such details are available.",
+    "applicability": {
+      "all_categories": true,
+      "packaged_food": "MANDATORY",
+      "cosmetics": "MANDATORY",
+      "household_commodity": "MANDATORY",
+      "condition": "Required on all pre-packaged commodities."
+    },
+    "validation_logic": "extract_consumer_care",
+    "severity": "HIGH",
+    "legal_reference": "Rule 6(1)(f), Legal Metrology (Packaged Commodities) Rules, 2011 (as amended)",
+    "source_document": "Legal Metrology (Packaged Commodities) Rules, 2011 (as amended)",
+    "source_date_version": "GSR 779(E) / Consolidated",
+    "official_source_url": "https://consumeraffairs.gov.in/index.php/pages/legal-metrology-act",
+    "notes": "Must include at minimum: contact number (phone or toll-free) or email. Address may reference the manufacturer address. System checks for phone number pattern and/or email pattern in extracted text."
+  },
+  {
+    "rule_id": "LM-PCR-2011-R6-1-G",
+    "declaration": "DIMENSIONS",
+    "requirement": "For commodities sold by size, dimensions, or area (e.g. foil, cloth, blankets, carpets), the relevant dimension (length × width, area) shall be declared.",
+    "applicability": {
+      "all_categories": false,
+      "packaged_food": "NOT_APPLICABLE",
+      "cosmetics": "NOT_APPLICABLE",
+      "household_commodity": "CONDITIONAL",
+      "condition": "Applicable ONLY to household commodities sold by dimension or area such as foil wrap, fabric, carpets, sheets, etc. System applies only if product_sub_type indicates a dimension-based commodity."
+    },
+    "validation_logic": "extract_dimensions",
+    "severity": "MEDIUM",
+    "legal_reference": "Rule 6(1)(g), Legal Metrology (Packaged Commodities) Rules, 2011",
+    "source_document": "Legal Metrology (Packaged Commodities) Rules, 2011 (as amended)",
+    "source_date_version": "GSR 779(E) / Consolidated",
+    "official_source_url": "https://consumeraffairs.gov.in/index.php/pages/legal-metrology-act",
+    "notes": "Most household commodities do not require dimensions. System marks NOT_APPLICABLE by default unless dimension-sold flag is set."
+  }
+]

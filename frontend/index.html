@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>LEGALMET AI — Legal Metrology Inspection Platform</title>
+  <meta name="description" content="AI-Assisted Legal Metrology Compliance Inspection Platform for Packaged Commodities (PCR 2011)." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #0a0d14;
+      --bg-surface: #0f1422;
+      --bg-card: #151b2e;
+      --bg-elevated: #1c243c;
+      --bg-hover: #222c48;
+      --border: #263152;
+      --border-subtle: #1c243c;
+      --accent: #3b82f6;
+      --accent-light: #60a5fa;
+      --accent-dark: #1d4ed8;
+      --accent-glow: rgba(59, 130, 246, 0.15);
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.12);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.12);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.12);
+      --info: #06b6d4;
+      --info-bg: rgba(6, 182, 212, 0.12);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-xl: 20px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.6);
+      --sidebar-w: 260px;
+      --header-h: 64px;
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background: var(--bg-base);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      touch-action: manipulation;
+    }
+    a { color: var(--accent-light); text-decoration: none; }
+    button, input, select, textarea { font-family: inherit; font-size: inherit; }
+
+    /* ── Typography & Utils ─────────────────────────────────────────── */
+    .font-mono { font-family: var(--mono); }
+    .text-xs { font-size: 11px; }
+    .text-sm { font-size: 13px; }
+    .text-muted { color: var(--text-muted); }
+    .text-secondary { color: var(--text-secondary); }
+    .flex { display: flex; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-4 { gap: 4px; }
+    .gap-8 { gap: 8px; }
+    .gap-12 { gap: 12px; }
+    .gap-16 { gap: 16px; }
+    .w-full { width: 100%; }
+    .hidden { display: none !important; }
+
+    /* ── Buttons ────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 10px 18px; border-radius: var(--radius-md); font-size: 13px;
+      font-weight: 600; cursor: pointer; border: 1px solid transparent;
+      transition: all var(--transition); text-decoration: none; white-space: nowrap;
+      min-height: 42px; user-select: none;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: white; box-shadow: 0 2px 10px rgba(59,130,246,0.3); }
+    .btn-primary:hover { background: linear-gradient(135deg, var(--accent-light), var(--accent)); box-shadow: 0 4px 16px rgba(59,130,246,0.45); }
+    .btn-secondary { background: var(--bg-elevated); color: var(--text-primary); border-color: var(--border); }
+    .btn-secondary:hover { background: var(--bg-hover); border-color: var(--accent); }
+    .btn-success { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+    .btn-ghost { background: transparent; color: var(--text-secondary); border-color: transparent; }
+    .btn-ghost:hover { background: var(--bg-elevated); color: var(--text-primary); }
+    .btn-sm { padding: 6px 12px; font-size: 12px; min-height: 32px; border-radius: var(--radius-sm); }
+    .btn-lg { padding: 14px 24px; font-size: 15px; min-height: 48px; border-radius: var(--radius-lg); }
+    .btn-block { width: 100%; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* ── Camera & Action Highlights ────────────────────────────────── */
+    .btn-camera {
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      color: white;
+      box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .btn-camera:hover {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      box-shadow: 0 6px 20px rgba(99,102,241,0.5);
+    }
+
+    /* ── Auth Screen ────────────────────────────────────────────────── */
+    #auth-screen {
+      position: fixed; inset: 0; z-index: 1000;
+      background: radial-gradient(circle at 50% 20%, #151b2e 0%, var(--bg-base) 100%);
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+    }
+    .auth-card {
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); padding: 36px; width: 100%; max-width: 440px;
+      box-shadow: var(--shadow-lg);
+    }
+    .auth-logo { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+    .auth-logo .logo-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; box-shadow: 0 0 20px rgba(59,130,246,0.4); flex-shrink: 0;
+    }
+    .auth-logo h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .auth-logo p { font-size: 11px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.5px; }
+    .auth-subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: 24px; }
+    .form-field { margin-bottom: 16px; }
+    .form-field label { display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .form-field input {
+      width: 100%; padding: 11px 14px; background: var(--bg-elevated);
+      border: 1px solid var(--border); border-radius: var(--radius-md);
+      color: var(--text-primary); font-size: 14px; outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .form-field input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+    .auth-error { background: var(--danger-bg); border: 1px solid rgba(239,68,68,0.3); color: var(--danger); padding: 10px 14px; border-radius: var(--radius-md); font-size: 13px; margin-bottom: 16px; display: none; }
+    .auth-disclaimer { margin-top: 20px; padding: 12px; background: var(--bg-elevated); border-radius: var(--radius-md); font-size: 11px; color: var(--text-muted); line-height: 1.5; border-left: 3px solid var(--warning); }
+    .quick-login-box { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 18px; }
+    .quick-login-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .quick-login-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip { padding: 6px 12px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; font-size: 12px; color: var(--text-secondary); cursor: pointer; transition: all var(--transition); font-weight: 500; }
+    .chip:hover { border-color: var(--accent); color: var(--accent-light); background: var(--accent-glow); }
+
+    /* ── App Shell ──────────────────────────────────────────────────── */
+    #app-shell { display: none; flex: 1; height: 100vh; overflow: hidden; }
+    #app-shell.visible { display: flex; }
+
+    /* ── Sidebar ────────────────────────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w); background: var(--bg-surface);
+      border-right: 1px solid var(--border); display: flex; flex-direction: column;
+      flex-shrink: 0; z-index: 100; transition: transform var(--transition);
+    }
+    .sidebar-header {
+      padding: 20px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .sidebar-logo-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+      box-shadow: 0 0 12px rgba(59,130,246,0.3); flex-shrink: 0;
+    }
+    .sidebar-logo-text h2 { font-size: 15px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+    .sidebar-logo-text span { font-size: 10px; color: var(--text-muted); font-weight: 500; letter-spacing: 0.3px; }
+    .sidebar-nav { flex: 1; overflow-y: auto; padding: 12px 10px; }
+    .nav-section-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; padding: 8px 10px 4px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: var(--radius-md);
+      color: var(--text-secondary); font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: all var(--transition); margin-bottom: 3px;
+    }
+    .nav-item:hover { background: var(--bg-elevated); color: var(--text-primary); }
+    .nav-item.active { background: var(--accent-glow); color: var(--accent-light); font-weight: 600; }
+    .nav-item .nav-icon { width: 22px; text-align: center; font-size: 16px; flex-shrink: 0; }
+    .nav-item .nav-badge {
+      margin-left: auto; background: var(--accent); color: white;
+      font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 10px;
+    }
+    .sidebar-footer {
+      padding: 14px 16px; border-top: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 10px; flex-shrink: 0;
+    }
+    .user-profile-row { display: flex; align-items: center; gap: 10px; }
+    .avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-dark), #1a3a7c);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: white; flex-shrink: 0;
+    }
+    .sidebar-user { flex: 1; overflow: hidden; }
+    .sidebar-user .user-name { font-size: 13px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sidebar-user .user-role { font-size: 11px; color: var(--text-muted); }
+    
+    .lan-network-badge {
+      background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.25);
+      border-radius: var(--radius-sm); padding: 6px 10px; font-size: 11px;
+      color: var(--accent-light); display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; transition: all var(--transition);
+    }
+    .lan-network-badge:hover { background: rgba(59,130,246,0.18); }
+
+    /* ── Main Content ───────────────────────────────────────────────── */
+    .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .topbar {
+      height: var(--header-h); display: flex; align-items: center;
+      padding: 0 24px; border-bottom: 1px solid var(--border);
+      background: var(--bg-surface); gap: 12px; flex-shrink: 0;
+    }
+    .mobile-menu-toggle { display: none; background: none; border: none; font-size: 20px; color: var(--text-primary); cursor: pointer; padding: 6px; }
+    .topbar-title { font-size: 17px; font-weight: 700; color: var(--text-primary); flex: 1; }
+    .topbar-actions { display: flex; gap: 8px; align-items: center; }
+    .page-content { flex: 1; overflow-y: auto; padding: 24px; -webkit-overflow-scrolling: touch; }
+
+    /* ── Pages ──────────────────────────────────────────────────────── */
+    .page { display: none; }
+    .page.active { display: block; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* ── Dashboard Stats ────────────────────────────────────────────── */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 24px; }
+    .stat-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 18px;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .stat-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; }
+    .stat-value { font-size: 30px; font-weight: 800; margin: 6px 0 2px; line-height: 1; }
+    .stat-sub { font-size: 11px; color: var(--text-muted); }
+    .stat-card.pass .stat-value { color: var(--success); }
+    .stat-card.nc .stat-value { color: var(--danger); }
+    .stat-card.mr .stat-value { color: var(--warning); }
+    .stat-card.total .stat-value { color: var(--accent); }
+
+    /* ── Section headers ────────────────────────────────────────────── */
+    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .section-header h3 { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+    .section-header .ml-auto { margin-left: auto; }
+
+    /* ── Table ──────────────────────────────────────────────────────── */
+    .table-wrap {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); overflow-x: auto;
+    }
+    .table-toolbar { padding: 12px 16px; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .search-input {
+      flex: 1; min-width: 160px; padding: 9px 12px;
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: var(--radius-md); color: var(--text-primary); font-size: 13px; outline: none;
+      transition: border-color var(--transition);
+    }
+    .search-input:focus { border-color: var(--accent); }
+    .filter-select {
+      padding: 9px 12px; background: var(--bg-elevated);
+      border: 1px solid var(--border); border-radius: var(--radius-md);
+      color: var(--text-primary); font-size: 13px; outline: none;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th {
+      padding: 12px 14px; text-align: left; font-size: 11px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border); background: var(--bg-elevated); white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background var(--transition); cursor: pointer; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--bg-hover); }
+    td { padding: 12px 14px; color: var(--text-primary); vertical-align: middle; }
+    .id-cell { font-family: var(--mono); font-size: 12px; color: var(--accent-light); font-weight: 600; white-space: nowrap; }
+
+    /* ── Badges / Status ────────────────────────────────────────────── */
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.4px; white-space: nowrap;
+    }
+    .badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; }
+    .badge-pass { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16,185,129,0.3); }
+    .badge-pass::before { background: var(--success); }
+    .badge-nc { background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
+    .badge-nc::before { background: var(--danger); }
+    .badge-mr { background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(245,158,11,0.3); }
+    .badge-mr::before { background: var(--warning); }
+    .badge-draft { background: rgba(148,163,184,0.12); color: var(--text-secondary); border: 1px solid var(--border); }
+    .badge-draft::before { background: var(--text-muted); }
+    .badge-processing { background: var(--info-bg); color: var(--info); border: 1px solid rgba(6,182,212,0.3); }
+    .badge-processing::before { background: var(--info); }
+    .badge-found { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16,185,129,0.25); }
+    .badge-not_found { background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(239,68,68,0.25); }
+    .badge-uncertain { background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(245,158,11,0.25); }
+    .badge-na { background: rgba(148,163,184,0.1); color: var(--text-muted); border: 1px solid var(--border); }
+    .badge-manual_review { background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(245,158,11,0.3); }
+
+    /* ── Modal ──────────────────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.75); backdrop-filter: blur(5px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px; opacity: 0; pointer-events: none;
+      transition: opacity var(--transition);
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal {
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); width: 100%; max-width: 580px;
+      max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg);
+      transform: translateY(20px); transition: transform var(--transition);
+      display: flex; flex-direction: column;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-header { padding: 20px 24px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border-subtle); }
+    .modal-header h3 { flex: 1; font-size: 17px; font-weight: 700; }
+    .modal-body { padding: 20px 24px; overflow-y: auto; }
+    .modal-footer { padding: 16px 24px 20px; display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid var(--border-subtle); }
+    .modal-close { background: none; border: none; color: var(--text-muted); font-size: 20px; padding: 4px; cursor: pointer; transition: color var(--transition); }
+    .modal-close:hover { color: var(--text-primary); }
+
+    /* ── Forms ──────────────────────────────────────────────────────── */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 10px 13px;
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: var(--radius-md); color: var(--text-primary);
+      font-size: 14px; outline: none; transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+    .form-group select option { background: var(--bg-elevated); }
+    .form-group textarea { resize: vertical; min-height: 70px; }
+    .form-group .hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .form-check { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .form-check input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+    .form-check label { font-size: 13px; color: var(--text-secondary); cursor: pointer; }
+
+    /* ── Mobile Camera & Upload Action Cards ───────────────────────── */
+    .upload-action-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;
+    }
+    .action-card-btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 20px 14px; border-radius: var(--radius-lg); text-align: center;
+      cursor: pointer; transition: all var(--transition); border: 2px solid var(--border);
+      background: var(--bg-elevated); gap: 8px; min-height: 110px;
+    }
+    .action-card-btn:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+    .action-card-btn.camera-card {
+      background: linear-gradient(145deg, rgba(37,99,235,0.15), rgba(124,58,237,0.15));
+      border-color: rgba(99,102,241,0.4);
+    }
+    .action-card-btn.camera-card:hover {
+      background: linear-gradient(145deg, rgba(37,99,235,0.25), rgba(124,58,237,0.25));
+      border-color: var(--accent-light);
+    }
+    .action-card-icon { font-size: 32px; line-height: 1; }
+    .action-card-title { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+    .action-card-sub { font-size: 11px; color: var(--text-muted); }
+
+    .upload-dropzone {
+      border: 2px dashed var(--border); border-radius: var(--radius-lg);
+      padding: 20px; text-align: center; cursor: pointer;
+      background: rgba(21,27,46,0.5); transition: all var(--transition);
+    }
+    .upload-dropzone:hover, .upload-dropzone.drag-over { border-color: var(--accent); background: var(--accent-glow); }
+    .upload-dropzone p { color: var(--text-secondary); font-size: 12px; margin-top: 4px; }
+
+    .image-preview-box {
+      margin-top: 14px; background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 12px; display: flex; flex-direction: column; gap: 10px;
+    }
+    .preview-header { display: flex; align-items: center; justify-content: space-between; }
+    .preview-img-wrap {
+      max-height: 240px; display: flex; align-items: center; justify-content: center;
+      overflow: hidden; border-radius: var(--radius-md); background: #000;
+    }
+    .preview-img-wrap img { max-height: 240px; max-width: 100%; object-fit: contain; }
+
+    /* ── Detail Page Styling ────────────────────────────────────────── */
+    .detail-header { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+    .detail-id { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--accent-light); }
+    .detail-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
+    .detail-meta span { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+    .detail-actions { display: flex; gap: 8px; margin-left: auto; flex-wrap: wrap; }
+
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .info-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px 16px; }
+    .info-item .info-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .info-item .info-value { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+
+    .confidence-bar-wrap { margin-bottom: 20px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; }
+    .confidence-bar-wrap h4 { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+    .conf-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .conf-label { font-size: 12px; color: var(--text-secondary); width: 160px; flex-shrink: 0; }
+    .conf-bar-bg { flex: 1; height: 8px; background: var(--bg-elevated); border-radius: 4px; overflow: hidden; }
+    .conf-bar { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+    .conf-val { font-size: 12px; font-family: var(--mono); color: var(--text-secondary); width: 44px; text-align: right; }
+
+    /* ── Alerts & Disclaimers ───────────────────────────────────────── */
+    .alert {
+      padding: 12px 16px; border-radius: var(--radius-md);
+      font-size: 13px; margin-bottom: 16px; display: flex; gap: 10px; align-items: flex-start;
+    }
+    .alert-warning { background: var(--warning-bg); border: 1px solid rgba(245,158,11,0.3); color: var(--warning); }
+    .alert-danger { background: var(--danger-bg); border: 1px solid rgba(239,68,68,0.3); color: var(--danger); }
+    .alert-success { background: var(--success-bg); border: 1px solid rgba(16,185,129,0.3); color: var(--success); }
+    .alert-info { background: var(--info-bg); border: 1px solid rgba(6,182,212,0.3); color: var(--info); }
+
+    .disclaimer-banner {
+      background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.2);
+      border-radius: var(--radius-md); padding: 10px 14px;
+      font-size: 12px; color: var(--text-muted); display: flex; gap: 8px;
+      margin-bottom: 20px; line-height: 1.5;
+    }
+    .disclaimer-banner .disclaimer-icon { color: var(--warning); flex-shrink: 0; margin-top: 1px; }
+    .demo-banner {
+      background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.35);
+      border-radius: var(--radius-md); padding: 8px 14px;
+      font-size: 12px; color: var(--warning); font-weight: 700;
+      letter-spacing: 0.3px; margin-bottom: 16px;
+    }
+
+    /* ── Review Form ────────────────────────────────────────────────── */
+    .review-options { display: flex; gap: 10px; margin-bottom: 16px; }
+    .review-option {
+      flex: 1; padding: 12px; border: 2px solid var(--border);
+      border-radius: var(--radius-md); text-align: center; cursor: pointer;
+      transition: all var(--transition); background: var(--bg-elevated);
+    }
+    .review-option:hover { border-color: var(--accent); }
+    .review-option.selected-confirmed { border-color: var(--success); background: var(--success-bg); color: var(--success); }
+    .review-option.selected-overridden { border-color: var(--warning); background: var(--warning-bg); color: var(--warning); }
+    .review-option.selected-rejected { border-color: var(--danger); background: var(--danger-bg); color: var(--danger); }
+    .review-option .review-icon { font-size: 20px; margin-bottom: 4px; }
+    .review-option .review-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* ── Loading, Spinners, Toasts ──────────────────────────────────── */
+    .spinner {
+      display: inline-block; width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-top-color: white; border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    .spinner-lg { width: 36px; height: 36px; border-width: 3px; border-top-color: var(--accent); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 16px; padding: 48px;
+    }
+
+    #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; max-width: calc(100vw - 40px); }
+    .toast {
+      min-width: 260px; max-width: 380px; padding: 12px 16px;
+      border-radius: var(--radius-md); font-size: 13px; font-weight: 500;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: var(--shadow-lg); border: 1px solid transparent;
+      animation: toastIn 0.3s ease;
+    }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .toast-success { background: #064e3b; border-color: rgba(16,185,129,0.4); color: #6ee7b7; }
+    .toast-error { background: #450a0a; border-color: rgba(239,68,68,0.4); color: #fca5a5; }
+    .toast-info { background: #0c4a6e; border-color: rgba(6,182,212,0.4); color: #7dd3fc; }
+
+    /* ── Mobile Bottom Navigation Bar ───────────────────────────────── */
+    .mobile-bottom-nav {
+      display: none; position: fixed; bottom: 0; left: 0; right: 0;
+      height: 60px; background: var(--bg-surface); border-top: 1px solid var(--border);
+      z-index: 300; align-items: center; justify-content: space-around;
+      padding: 0 8px;
+    }
+    .mobile-nav-btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 3px; font-size: 10px; color: var(--text-muted); cursor: pointer;
+      background: none; border: none; flex: 1; height: 100%;
+    }
+    .mobile-nav-btn.active { color: var(--accent-light); font-weight: 700; }
+    .mobile-nav-btn .icon { font-size: 18px; }
+    .mobile-nav-btn.primary-capture {
+      color: white; transform: translateY(-10px);
+    }
+    .mobile-nav-btn.primary-capture .bubble {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; box-shadow: 0 4px 12px rgba(99,102,241,0.5);
+    }
+
+    /* ── Responsive Queries ─────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%);
+        box-shadow: var(--shadow-lg);
+      }
+      .sidebar.open { transform: translateX(0); }
+      .mobile-menu-toggle { display: block; }
+      .mobile-bottom-nav { display: flex; }
+      .page-content { padding: 16px 14px 76px 14px; }
+      .topbar { padding: 0 16px; }
+      .form-row { grid-template-columns: 1fr; }
+      .upload-action-grid { grid-template-columns: 1fr; }
+      .modal { max-height: 94vh; margin: auto; }
+      .modal-body { padding: 16px; }
+      .modal-header, .modal-footer { padding: 14px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     AUTH SCREEN
+══════════════════════════════════════════════════════════════════════ -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="logo-icon">⚖️</div>
+      <div class="logo-text">
+        <h1>LEGALMET AI</h1>
+        <p>SIH26034 · Ministry of Consumer Affairs</p>
+      </div>
+    </div>
+    <p class="auth-subtitle">Legal Metrology Compliance Inspection Platform</p>
+    
+    <div class="quick-login-box">
+      <div class="quick-login-title">Quick Demo Login</div>
+      <div class="quick-login-chips">
+        <button type="button" class="chip" onclick="fillAndLogin('inspector1', 'Inspector@1234!')">
+          👤 Inspector Demo (<code>inspector1</code>)
+        </button>
+        <button type="button" class="chip" onclick="fillAndLogin('admin', 'Admin@1234!')">
+          🔑 Admin (<code>admin</code>)
+        </button>
+      </div>
+    </div>
+
+    <div id="auth-error" class="auth-error">⚠ Invalid credentials or server unreachable.</div>
+    <form onsubmit="event.preventDefault(); doLogin();">
+      <div class="form-field">
+        <label for="login-username">Username</label>
+        <input type="text" id="login-username" value="inspector1" autocomplete="username" />
+      </div>
+      <div class="form-field">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" value="Inspector@1234!" autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="login-btn">
+        Sign In to Inspector Portal
+      </button>
+    </form>
+
+    <div class="auth-disclaimer">
+      <strong>⚠ Statutory Notice:</strong> This AI-assisted system provides preliminary compliance assessment only. Final statutory determination and enforcement action remains with the authorized officer under the Legal Metrology Act, 2009.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     APP SHELL
+══════════════════════════════════════════════════════════════════════ -->
+<div id="app-shell">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="app-sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo-icon">⚖️</div>
+      <div class="sidebar-logo-text">
+        <h2>LEGALMET AI</h2>
+        <span>Inspector Portal</span>
+      </div>
+      <button class="modal-close" style="margin-left:auto;display:none" id="sidebar-close-btn" onclick="toggleSidebar(false)">✕</button>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Field Inspection</div>
+      <div class="nav-item" id="nav-quick-capture" onclick="openQuickCaptureModal()">
+        <span class="nav-icon">📸</span> Capture Product
+      </div>
+      <div class="nav-item" id="nav-new-inspection" onclick="openNewInspectionModal()">
+        <span class="nav-icon">➕</span> New Inspection
+      </div>
+      <div class="nav-section-label" style="margin-top:12px">Management</div>
+      <div class="nav-item active" id="nav-dashboard" onclick="showPage('dashboard')">
+        <span class="nav-icon">📊</span> Dashboard
+      </div>
+      <div class="nav-item" id="nav-inspections" onclick="showPage('inspections')">
+        <span class="nav-icon">🔍</span> Inspection Records
+        <span class="nav-badge" id="nav-badge-inspections">—</span>
+      </div>
+      <div class="nav-section-label" style="margin-top:12px">Statutory Rules</div>
+      <div class="nav-item" id="nav-rules" onclick="showPage('rules')">
+        <span class="nav-icon">📋</span> Rule Catalog
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="lan-network-badge" id="lan-ip-badge" onclick="showNetworkModal()" title="Local Network URL for Mobile Phone">
+        <span>📱 <span id="lan-ip-text">Local Network IP</span></span>
+        <span style="font-size:9px;opacity:0.8">VIEW ➔</span>
+      </div>
+      <div class="user-profile-row">
+        <div class="avatar" id="sidebar-avatar">?</div>
+        <div class="sidebar-user">
+          <div class="user-name" id="sidebar-name">Loading…</div>
+          <div class="user-role" id="sidebar-role">—</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="doLogout()" title="Logout" style="padding:6px;font-size:16px;">↩</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main View -->
+  <main class="main-content">
+    <div class="topbar">
+      <button class="mobile-menu-toggle" onclick="toggleSidebar(true)">☰</button>
+      <span class="topbar-title" id="topbar-title">Dashboard</span>
+      <div class="topbar-actions">
+        <button class="btn btn-camera btn-sm" onclick="openQuickCaptureModal()">
+          📸 Capture Product
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="openNewInspectionModal()">
+          ➕ New
+        </button>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- ── Dashboard Page ── -->
+      <div id="page-dashboard" class="page active">
+        <div class="disclaimer-banner">
+          <span class="disclaimer-icon">⚠</span>
+          <span><strong>AI-Assisted Preliminary Assessment System.</strong> Assessments are based on image analysis and multi-pass OCR extraction. Final statutory determination remains with the authorized officer under the Legal Metrology Act, 2009.</span>
+        </div>
+        <div class="stats-grid" id="stats-grid">
+          <div class="stat-card total">
+            <div class="stat-label">Total Inspections</div>
+            <div class="stat-value" id="stat-total">—</div>
+            <div class="stat-sub">All-time records</div>
+          </div>
+          <div class="stat-card pass">
+            <div class="stat-label">PASS</div>
+            <div class="stat-value" id="stat-pass">—</div>
+            <div class="stat-sub" id="stat-pass-pct">—</div>
+          </div>
+          <div class="stat-card nc">
+            <div class="stat-label">Non-Compliance</div>
+            <div class="stat-value" id="stat-nc">—</div>
+            <div class="stat-sub" id="stat-nc-pct">—</div>
+          </div>
+          <div class="stat-card mr">
+            <div class="stat-label">Manual Review</div>
+            <div class="stat-value" id="stat-mr">—</div>
+            <div class="stat-sub" id="stat-mr-pct">—</div>
+          </div>
+        </div>
+        <div class="section-header">
+          <h3>Recent Inspections</h3>
+          <button class="btn btn-secondary btn-sm ml-auto" onclick="showPage('inspections')">View All →</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Inspection ID</th>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Confidence</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="recent-tbody">
+              <tr><td colspan="6" class="text-muted text-xs" style="padding:24px;text-align:center">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── Inspections List Page ── -->
+      <div id="page-inspections" class="page">
+        <div class="table-wrap">
+          <div class="table-toolbar">
+            <input class="search-input" id="insp-search" placeholder="🔍  Search ID, product, brand…" oninput="filterInspections()" />
+            <select class="filter-select" id="insp-status-filter" onchange="filterInspections()">
+              <option value="">All Statuses</option>
+              <option value="PASS">PASS</option>
+              <option value="POTENTIAL_NON_COMPLIANCE">Non-Compliance</option>
+              <option value="MANUAL_REVIEW">Manual Review</option>
+              <option value="DRAFT">Draft</option>
+              <option value="PROCESSING">Processing</option>
+            </select>
+            <select class="filter-select" id="insp-cat-filter" onchange="filterInspections()">
+              <option value="">All Categories</option>
+              <option value="PACKAGED_FOOD">Packaged Food</option>
+              <option value="COSMETICS">Cosmetics</option>
+              <option value="HOUSEHOLD_COMMODITY">Household</option>
+            </select>
+            <button class="btn btn-primary btn-sm" onclick="loadInspections()">↺ Refresh</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Inspection ID</th>
+                <th>Product / Brand</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Confidence</th>
+                <th>Inspector</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inspections-tbody">
+              <tr><td colspan="8" class="text-muted text-xs" style="padding:24px;text-align:center">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── Inspection Detail Page ── -->
+      <div id="page-detail" class="page">
+        <div id="detail-content">
+          <div class="loading-overlay"><div class="spinner spinner-lg"></div><p class="text-muted">Loading inspection…</p></div>
+        </div>
+      </div>
+
+      <!-- ── Rules Page ── -->
+      <div id="page-rules" class="page">
+        <div class="section-header">
+          <h3>Legal Metrology Rule Catalog</h3>
+          <span class="text-muted text-xs ml-auto">Legal Metrology (Packaged Commodities) Rules, 2011</span>
+        </div>
+        <div id="rules-list">
+          <div class="loading-overlay"><div class="spinner spinner-lg"></div></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ── Mobile Bottom Navigation Bar ── -->
+<div class="mobile-bottom-nav">
+  <button class="mobile-nav-btn active" id="mob-nav-dash" onclick="showPage('dashboard')">
+    <span class="icon">📊</span>
+    <span>Dashboard</span>
+  </button>
+  <button class="mobile-nav-btn" id="mob-nav-insp" onclick="showPage('inspections')">
+    <span class="icon">🔍</span>
+    <span>Records</span>
+  </button>
+  <button class="mobile-nav-btn primary-capture" onclick="openQuickCaptureModal()">
+    <div class="bubble">📸</div>
+    <span>Capture</span>
+  </button>
+  <button class="mobile-nav-btn" id="mob-nav-rules" onclick="showPage('rules')">
+    <span class="icon">📋</span>
+    <span>Rules</span>
+  </button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     MODALS
+══════════════════════════════════════════════════════════════════════ -->
+
+<!-- Hidden Native Input Elements for Camera Capture and Gallery Upload -->
+<input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none" onchange="handleNativeFileSelect(event)" />
+<input type="file" id="gallery-input" accept="image/*,.jpg,.jpeg,.png,.webp,.bmp,.tiff" style="display:none" onchange="handleNativeFileSelect(event)" />
+
+<!-- Quick Mobile Capture Modal (Snap & Inspect) -->
+<div class="modal-overlay" id="modal-quick-capture">
+  <div class="modal" style="max-width:540px">
+    <div class="modal-header">
+      <h3>📸 Capture &amp; Inspect Product</h3>
+      <button class="modal-close" onclick="closeModal('modal-quick-capture')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Product Name</label>
+        <input type="text" id="quick-product-name" placeholder="e.g. Marie Gold Biscuits 250g" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Brand (optional)</label>
+          <input type="text" id="quick-brand-name" placeholder="e.g. Britannia" />
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="quick-category">
+            <option value="PACKAGED_FOOD">Packaged Food</option>
+            <option value="COSMETICS">Cosmetics / Personal Care</option>
+            <option value="HOUSEHOLD_COMMODITY">Household Commodity</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">
+        Choose Photo Source
+      </div>
+      <div class="upload-action-grid">
+        <div class="action-card-btn camera-card" onclick="triggerCameraInput('quick')">
+          <div class="action-card-icon">📸</div>
+          <div class="action-card-title">Capture with Camera</div>
+          <div class="action-card-sub">Opens rear mobile camera</div>
+        </div>
+        <div class="action-card-btn" onclick="triggerGalleryInput('quick')">
+          <div class="action-card-icon">📁</div>
+          <div class="action-card-title">Choose from Gallery</div>
+          <div class="action-card-sub">Select image file / photo</div>
+        </div>
+      </div>
+
+      <div id="quick-preview-box" class="image-preview-box hidden">
+        <div class="preview-header">
+          <span style="font-size:12px;font-weight:700;color:var(--success)">✓ Photo Selected</span>
+          <button class="btn btn-ghost btn-sm" onclick="triggerCameraInput('quick')">🔄 Retake</button>
+        </div>
+        <div class="preview-img-wrap">
+          <img id="quick-preview-img" src="" alt="Captured product preview" />
+        </div>
+      </div>
+
+      <div id="quick-quality-box" class="hidden" style="margin-top:12px"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-quick-capture')">Cancel</button>
+      <button class="btn btn-primary" id="quick-analyze-btn" onclick="runQuickCapturePipeline()" disabled>
+        🔬 Start AI Inspection
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Upload / Capture Package Image Modal for existing inspection -->
+<div class="modal-overlay" id="modal-upload">
+  <div class="modal" style="max-width:580px">
+    <div class="modal-header">
+      <h3>Attach Packaging Photo</h3>
+      <button class="modal-close" onclick="closeModal('modal-upload')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">
+        Inspection: <span class="font-mono" style="color:var(--accent-light)" id="upload-inspection-id">—</span>
+      </p>
+
+      <div class="upload-action-grid">
+        <div class="action-card-btn camera-card" onclick="triggerCameraInput('existing')">
+          <div class="action-card-icon">📸</div>
+          <div class="action-card-title">Capture Product</div>
+          <div class="action-card-sub">Opens device camera directly</div>
+        </div>
+        <div class="action-card-btn" onclick="triggerGalleryInput('existing')">
+          <div class="action-card-icon">📁</div>
+          <div class="action-card-title">Gallery / Files</div>
+          <div class="action-card-sub">Browse existing photo</div>
+        </div>
+      </div>
+
+      <!-- Desktop drag & drop zone -->
+      <div class="upload-dropzone" id="upload-dropzone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" onclick="triggerGalleryInput('existing')">
+        <div style="font-size:24px;opacity:0.8">📥</div>
+        <p>Or drag &amp; drop packaging image here (JPG, PNG, WEBP)</p>
+      </div>
+
+      <div id="upload-preview-box" class="image-preview-box hidden">
+        <div class="preview-header">
+          <span style="font-size:12px;font-weight:700;color:var(--success)">✓ Image Attached</span>
+          <button class="btn btn-ghost btn-sm" onclick="triggerCameraInput('existing')">🔄 Retake</button>
+        </div>
+        <div class="preview-img-wrap">
+          <img id="upload-preview-img" src="" alt="Package preview" />
+        </div>
+      </div>
+
+      <div id="upload-quality-result" class="hidden" style="margin-top:14px"></div>
+
+      <div class="form-check" style="margin-top:14px">
+        <input type="checkbox" id="is-imported-cb" />
+        <label for="is-imported-cb">Product is imported / packaged abroad (activates Country of Origin rule)</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-upload')">Cancel</button>
+      <button class="btn btn-primary" id="analyze-btn" onclick="runAnalysis()" disabled>
+        🔬 Run AI Analysis
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- New Inspection Modal -->
+<div class="modal-overlay" id="modal-new-inspection">
+  <div class="modal" style="max-width:540px">
+    <div class="modal-header">
+      <h3>New Inspection</h3>
+      <button class="modal-close" onclick="closeModal('modal-new-inspection')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Product Name</label>
+          <input type="text" id="new-product-name" placeholder="e.g. Wheat Biscuits 200g" />
+        </div>
+        <div class="form-group">
+          <label>Brand Name</label>
+          <input type="text" id="new-brand-name" placeholder="e.g. Britannia" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Product Category</label>
+        <select id="new-category">
+          <option value="PACKAGED_FOOD">Packaged Food</option>
+          <option value="COSMETICS">Cosmetics / Personal Care</option>
+          <option value="HOUSEHOLD_COMMODITY">Household Commodity</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Notes (optional)</label>
+        <textarea id="new-notes" placeholder="Location, market, inspection context…"></textarea>
+      </div>
+      <div class="form-check">
+        <input type="checkbox" id="new-is-demo" />
+        <label for="new-is-demo">Mark as Controlled Demo Test Case</label>
+      </div>
+      <div class="form-group hidden" id="demo-label-group">
+        <label>Demo Label</label>
+        <input type="text" id="new-demo-label" placeholder="e.g. DEMO 1 — High Compliance Baseline" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-new-inspection')">Cancel</button>
+      <button class="btn btn-primary" id="create-inspection-btn" onclick="createInspection()">Create &amp; Upload Photo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Network IP / Phone Link Modal -->
+<div class="modal-overlay" id="modal-network">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <h3>📱 Mobile Device Testing URL</h3>
+      <button class="modal-close" onclick="closeModal('modal-network')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px">
+        Connect your smartphone to the same Wi-Fi network as this computer, then open this URL in your mobile browser:
+      </p>
+      <div id="lan-url-container" style="display:flex;flex-direction:column;gap:10px">
+        <div class="loading-overlay"><div class="spinner"></div></div>
+      </div>
+      <div class="alert alert-info" style="margin-top:16px;font-size:12px">
+        💡 <strong>Mobile Camera Tip:</strong> When using the site on your phone, tapping <strong>"Capture Product"</strong> will directly activate your phone's camera!
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="closeModal('modal-network')">Got It</button>
+    </div>
+  </div>
+</div>
+
+<!-- Manual Review Modal -->
+<div class="modal-overlay" id="modal-review">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-header">
+      <h3>Inspector Manual Review</h3>
+      <button class="modal-close" onclick="closeModal('modal-review')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Inspection: <span class="font-mono" style="color:var(--accent-light)" id="review-inspection-id">—</span></p>
+      <div class="review-options">
+        <div class="review-option" id="rev-confirmed" onclick="selectReview('CONFIRMED')">
+          <div class="review-icon">✅</div>
+          <div class="review-label">Confirmed</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px">AI assessment upheld</div>
+        </div>
+        <div class="review-option" id="rev-overridden" onclick="selectReview('OVERRIDDEN')">
+          <div class="review-icon">🔄</div>
+          <div class="review-label">Overridden</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Physical inspection differs</div>
+        </div>
+        <div class="review-option" id="rev-rejected" onclick="selectReview('REJECTED')">
+          <div class="review-icon">❌</div>
+          <div class="review-label">Rejected</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Insufficient for action</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Statutory Notes</label>
+        <textarea id="review-notes" rows="4" placeholder="Record statutory observations, physical measurement results, legal basis for decision…"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Flagged Declarations (comma-separated field names)</label>
+        <input type="text" id="review-flags" placeholder="e.g. MRP, CONSUMER_CARE_DETAILS" />
+        <div class="hint">Enter declaration field names that require corrective action.</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-review')">Cancel</button>
+      <button class="btn btn-primary" id="submit-review-btn" onclick="submitReview()">Submit Review</button>
+    </div>
+  </div>
+</div>
+
+<!-- Visual Evidence Modal -->
+<div class="modal-overlay" id="modal-evidence">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-header">
+      <h3 id="evidence-modal-title">🔍 Visual Evidence Region</h3>
+      <button class="modal-close" onclick="closeModal('modal-evidence')">✕</button>
+    </div>
+    <div class="modal-body" id="evidence-modal-body">
+      <!-- Injected dynamically -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="closeModal('modal-evidence')">Close Evidence</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════════════════════ -->
+<script>
+const API = (window.__API_URL__ || window.location.origin);
+let authToken = null;
+let currentUser = null;
+let allInspections = [];
+let currentInspectionId = null;
+let selectedFile = null;
+let uploadedImageId = null;
+let selectedReview = null;
+let activeUploadTarget = 'existing'; // 'existing' | 'quick'
+let networkInfo = null;
+
+function fillAndLogin(user, pass) {
+  document.getElementById('login-username').value = user;
+  document.getElementById('login-password').value = pass;
+  doLogin();
+}
+
+async function doLogin() {
+  const btn = document.getElementById('login-btn');
+  const errEl = document.getElementById('auth-error');
+  const username = document.getElementById('login-username').value.trim();
+  const password = document.getElementById('login-password').value;
+  if (!username || !password) { showAuthError('Please enter username and password.'); return; }
+  btn.innerHTML = '<span class="spinner"></span> Signing in…';
+  btn.disabled = true;
+  errEl.style.display = 'none';
+  try {
+    const res = await fetch(`${API}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+    if (!res.ok) throw new Error('auth_fail');
+    const data = await res.json();
+    authToken = data.access_token;
+    const me = await apiFetch('/api/auth/me');
+    currentUser = me;
+    onLoginSuccess();
+  } catch (e) {
+    showAuthError('Invalid credentials or server unreachable.');
+  } finally {
+    btn.innerHTML = 'Sign In to Inspector Portal';
+    btn.disabled = false;
+  }
+}
+
+function showAuthError(msg) {
+  const el = document.getElementById('auth-error');
+  el.textContent = '⚠ ' + msg;
+  el.style.display = 'block';
+}
+
+function onLoginSuccess() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app-shell').classList.add('visible');
+  const initials = (currentUser.full_name || currentUser.username).split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('sidebar-avatar').textContent = initials;
+  document.getElementById('sidebar-name').textContent = currentUser.full_name || currentUser.username;
+  document.getElementById('sidebar-role').textContent = currentUser.role || '';
+  loadDashboard();
+  fetchNetworkInfo();
+}
+
+function doLogout() {
+  authToken = null; currentUser = null;
+  document.getElementById('app-shell').classList.remove('visible');
+  document.getElementById('auth-screen').style.display = 'flex';
+}
+
+function toggleSidebar(open) {
+  const sb = document.getElementById('app-sidebar');
+  if (open) {
+    sb.classList.add('open');
+    document.getElementById('sidebar-close-btn').style.display = 'block';
+  } else {
+    sb.classList.remove('open');
+  }
+}
+
+async function fetchNetworkInfo() {
+  try {
+    const res = await fetch(`${API}/api/system/network`);
+    if (res.ok) {
+      networkInfo = await res.json();
+      if (networkInfo.local_ips && networkInfo.local_ips.length > 0) {
+        document.getElementById('lan-ip-text').textContent = networkInfo.local_ips[0] + ':8000';
+      }
+    }
+  } catch (e) {}
+}
+
+function showNetworkModal() {
+  const container = document.getElementById('lan-url-container');
+  if (networkInfo && networkInfo.all_urls && networkInfo.all_urls.length > 0) {
+    container.innerHTML = networkInfo.all_urls.map(url => `
+      <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:10px 14px;display:flex;align-items:center;justify-content:space-between">
+        <span class="font-mono" style="color:var(--accent-light);font-size:13px;font-weight:600">${url}</span>
+        <button class="btn btn-secondary btn-sm" onclick="copyToClipboard('${url}')">📋 Copy</button>
+      </div>
+    `).join('');
+  } else {
+    container.innerHTML = `<div class="alert alert-info">Backend listening on port 8000. Access via your computer's local Wi-Fi IP address.</div>`;
+  }
+  openModal('modal-network');
+}
+
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('URL copied to clipboard!', 'success');
+  }).catch(() => {
+    showToast('Copied: ' + text, 'info');
+  });
+}
+
+document.getElementById('new-is-demo')?.addEventListener('change', function() {
+  document.getElementById('demo-label-group')?.classList.toggle('hidden', !this.checked);
+});
+
+async function apiFetch(path, opts = {}) {
+  const headers = { 'Authorization': `Bearer ${authToken}`, ...opts.headers };
+  if (!(opts.body instanceof FormData)) {
+    headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+  }
+  const res = await fetch(API + path, { ...opts, headers });
+  if (res.status === 401) { doLogout(); throw new Error('Unauthorized'); }
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    let msg = err.detail || `HTTP ${res.status}`;
+    if (Array.isArray(msg)) {
+      msg = msg.map(m => (m.loc ? m.loc.slice(1).join('.') + ': ' : '') + m.msg).join(', ');
+    } else if (typeof msg === 'object') {
+      msg = JSON.stringify(msg);
+    }
+    throw new Error(msg);
+  }
+  return res.json();
+}
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.mobile-nav-btn').forEach(n => n.classList.remove('active'));
+
+  const p = document.getElementById(`page-${name}`);
+  if (p) p.classList.add('active');
+
+  const navEl = document.getElementById(`nav-${name}`);
+  if (navEl) navEl.classList.add('active');
+
+  const mobEl = document.getElementById(`mob-nav-${name === 'dashboard' ? 'dash' : name === 'inspections' ? 'insp' : name}`);
+  if (mobEl) mobEl.classList.add('active');
+
+  const titles = { dashboard: 'Dashboard', inspections: 'Inspections', detail: 'Inspection Detail', rules: 'Rule Catalog' };
+  document.getElementById('topbar-title').textContent = titles[name] || name;
+  toggleSidebar(false);
+
+  if (name === 'inspections') loadInspections();
+  if (name === 'rules') loadRules();
+  if (name === 'dashboard') loadDashboard();
+}
+
+async function loadDashboard() {
+  try {
+    const data = await apiFetch('/api/dashboard/stats');
+    document.getElementById('stat-total').textContent = data.total_inspections;
+    document.getElementById('stat-pass').textContent = data.pass_count;
+    document.getElementById('stat-pass-pct').textContent = pct(data.pass_count, data.total_inspections) + ' of total';
+    document.getElementById('stat-nc').textContent = data.potential_non_compliance_count;
+    document.getElementById('stat-nc-pct').textContent = pct(data.potential_non_compliance_count, data.total_inspections) + ' of total';
+    document.getElementById('stat-mr').textContent = data.manual_review_count;
+    document.getElementById('stat-mr-pct').textContent = pct(data.manual_review_count, data.total_inspections) + ' of total';
+    document.getElementById('nav-badge-inspections').textContent = data.total_inspections;
+    renderInspectionsTable('recent-tbody', data.recent_inspections, 6);
+  } catch (e) {
+    showToast('Failed to load dashboard: ' + e.message, 'error');
+  }
+}
+
+function pct(n, total) {
+  if (!total) return '0%';
+  return Math.round(n / total * 100) + '%';
+}
+
+async function loadInspections() {
+  document.getElementById('inspections-tbody').innerHTML = `<tr><td colspan="8" style="padding:24px;text-align:center"><div class="spinner" style="margin:auto;border-top-color:var(--accent)"></div></td></tr>`;
+  try {
+    allInspections = await apiFetch('/api/inspections?limit=200');
+    renderFullInspectionsTable();
+  } catch (e) {
+    showToast('Failed to load inspections: ' + e.message, 'error');
+  }
+}
+
+function filterInspections() {
+  renderFullInspectionsTable();
+}
+
+function renderFullInspectionsTable() {
+  const search = (document.getElementById('insp-search')?.value || '').toLowerCase();
+  const statusF = document.getElementById('insp-status-filter')?.value || '';
+  const catF = document.getElementById('insp-cat-filter')?.value || '';
+  let data = allInspections.filter(i => {
+    const matchSearch = !search || [i.inspection_id, i.product_name, i.brand_name].some(v => (v||'').toLowerCase().includes(search));
+    const matchStatus = !statusF || i.status === statusF;
+    const matchCat = !catF || i.product_category === catF;
+    return matchSearch && matchStatus && matchCat;
+  });
+  renderInspectionsTable('inspections-tbody', data, 8);
+}
+
+function renderInspectionsTable(tbodyId, rows, cols) {
+  const tbody = document.getElementById(tbodyId);
+  if (!rows || rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="${cols}" style="padding:40px;text-align:center;color:var(--text-muted)">No inspections found.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(i => {
+    const statusBadge = statusBadgeHtml(i.status);
+    const conf = i.overall_confidence != null ? `<span class="font-mono" style="font-size:12px;color:${confColor(i.overall_confidence)}">${(i.overall_confidence*100).toFixed(1)}%</span>` : '<span class="text-muted text-xs">—</span>';
+    const date = i.created_at ? new Date(i.created_at).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }) : '—';
+    if (cols === 6) {
+      return `<tr onclick="openDetail('${i.inspection_id}')">
+        <td class="id-cell">${i.inspection_id}</td>
+        <td>${esc(i.product_name || '—')}<br><span class="text-muted text-xs">${esc(i.brand_name || '')}</span></td>
+        <td><span class="text-xs text-muted">${catLabel(i.product_category)}</span></td>
+        <td>${statusBadge}</td>
+        <td>${conf}</td>
+        <td class="text-xs text-muted">${date}</td>
+      </tr>`;
+    }
+    return `<tr onclick="openDetail('${i.inspection_id}')">
+      <td class="id-cell">${i.inspection_id}</td>
+      <td>${esc(i.product_name || '—')}<br><span class="text-muted text-xs">${esc(i.brand_name || '')}</span></td>
+      <td><span class="text-xs text-muted">${catLabel(i.product_category)}</span></td>
+      <td>${statusBadge}</td>
+      <td>${conf}</td>
+      <td class="text-xs text-muted">${esc(i.inspector_name || '—')}</td>
+      <td class="text-xs text-muted">${date}</td>
+      <td onclick="event.stopPropagation()">
+        <button class="btn btn-secondary btn-sm" onclick="openDetail('${i.inspection_id}')">View</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── Camera Capture & File Upload Triggers ── */
+function triggerCameraInput(target) {
+  activeUploadTarget = target;
+  const input = document.getElementById('camera-input');
+  input.value = '';
+  input.click();
+}
+
+function triggerGalleryInput(target) {
+  activeUploadTarget = target;
+  const input = document.getElementById('gallery-input');
+  input.value = '';
+  input.click();
+}
+
+function handleNativeFileSelect(e) {
+  if (e.target.files && e.target.files[0]) {
+    processSelectedFile(e.target.files[0]);
+  }
+}
+
+function handleDragOver(e) { e.preventDefault(); document.getElementById('upload-dropzone')?.classList.add('drag-over'); }
+function handleDragLeave() { document.getElementById('upload-dropzone')?.classList.remove('drag-over'); }
+function handleDrop(e) {
+  e.preventDefault(); handleDragLeave();
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    activeUploadTarget = 'existing';
+    processSelectedFile(file);
+  }
+}
+
+async function compressAndPrepareImage(file) {
+  if (!file || !file.type || !file.type.startsWith('image/')) return file;
+  return new Promise((resolve) => {
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      img.onload = () => {
+        const maxDim = 1920;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              const baseName = (file.name || 'captured_photo').replace(/\.[^/.]+$/, "");
+              const optimizedFile = new File([blob], `${baseName}.jpg`, {
+                type: 'image/jpeg',
+                lastModified: Date.now(),
+              });
+              resolve(optimizedFile);
+            } else {
+              resolve(file);
+            }
+          },
+          'image/jpeg',
+          0.88
+        );
+      };
+      img.onerror = () => resolve(file);
+      img.src = e.target.result;
+    };
+    reader.onerror = () => resolve(file);
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderProgressHud(containerId, stepNum, totalSteps, title, detail) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.classList.remove('hidden');
+  const pct = Math.round((stepNum / totalSteps) * 100);
+  el.innerHTML = `
+    <div style="background:var(--bg-elevated);border:1px solid var(--accent);border-radius:var(--radius-md);padding:14px;margin-top:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:12px;font-weight:700;color:var(--accent-light)">⚙ [${stepNum}/${totalSteps}] ${title}</span>
+        <span style="font-family:var(--mono);font-size:12px;color:var(--accent-light);font-weight:700">${pct}%</span>
+      </div>
+      <div style="height:6px;background:var(--bg-surface);border-radius:3px;overflow:hidden;margin-bottom:8px">
+        <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--accent),#7c3aed);transition:width 0.4s ease"></div>
+      </div>
+      <div style="font-size:11px;color:var(--text-muted)">${detail}</div>
+    </div>
+  `;
+}
+
+async function processSelectedFile(file) {
+  showToast('Optimizing photo for inspection…', 'info');
+  const optimized = await compressAndPrepareImage(file);
+  selectedFile = optimized;
+
+  const reader = new FileReader();
+  reader.onload = ev => {
+    if (activeUploadTarget === 'quick') {
+      document.getElementById('quick-preview-img').src = ev.target.result;
+      document.getElementById('quick-preview-box').classList.remove('hidden');
+      document.getElementById('quick-analyze-btn').disabled = false;
+    } else {
+      document.getElementById('upload-preview-img').src = ev.target.result;
+      document.getElementById('upload-preview-box').classList.remove('hidden');
+      uploadImageForExistingInspection();
+    }
+  };
+  reader.readAsDataURL(optimized);
+}
+
+function openQuickCaptureModal() {
+  selectedFile = null;
+  document.getElementById('quick-product-name').value = '';
+  document.getElementById('quick-brand-name').value = '';
+  document.getElementById('quick-preview-box').classList.add('hidden');
+  document.getElementById('quick-quality-box').innerHTML = '';
+  document.getElementById('quick-quality-box').classList.add('hidden');
+  document.getElementById('quick-analyze-btn').disabled = true;
+  openModal('modal-quick-capture');
+}
+
+async function runQuickCapturePipeline() {
+  if (!selectedFile) {
+    showToast('Please capture or select a product photo.', 'error');
+    return;
+  }
+  const productName = document.getElementById('quick-product-name').value.trim() || `Field Inspection ${new Date().toLocaleTimeString('en-IN')}`;
+  const brandName = document.getElementById('quick-brand-name').value.trim();
+  const category = document.getElementById('quick-category').value;
+  const btn = document.getElementById('quick-analyze-btn');
+  btn.disabled = true;
+
+  try {
+    // Stage 1: Create record & upload
+    renderProgressHud('quick-quality-box', 1, 3, 'Uploading & Quality Check', 'Compressing and uploading captured photo to inspector database…');
+    btn.innerHTML = '<span class="spinner"></span> Step 1/3: Uploading…';
+
+    const insp = await apiFetch('/api/inspections', {
+      method: 'POST',
+      body: JSON.stringify({
+        product_name: productName,
+        brand_name: brandName,
+        product_category: category,
+        notes: 'Captured via Mobile Camera Quick Inspection',
+      }),
+    });
+
+    const form = new FormData();
+    form.append('file', selectedFile);
+    await apiFetch(`/api/inspections/${insp.inspection_id}/upload`, {
+      method: 'POST', body: form, headers: {},
+    });
+
+    // Stage 2: OCR
+    renderProgressHud('quick-quality-box', 2, 3, 'Multi-Pass OCR & Token Fusion', 'Executing deep neural text recognition across enhanced contrast variants…');
+    btn.innerHTML = '<span class="spinner"></span> Step 2/3: OCR Recognition…';
+
+    // Stage 3: Statutory NLP & Rule Engine
+    renderProgressHud('quick-quality-box', 3, 3, 'Statutory Compliance Check', 'Validating extracted declarations against PCR 2011 Rule Matrix…');
+    btn.innerHTML = '<span class="spinner"></span> Step 3/3: Evaluating Rules…';
+
+    await apiFetch(`/api/inspections/${insp.inspection_id}/analyze`, { method: 'POST' });
+
+    closeModal('modal-quick-capture');
+    showToast(`Inspection ${insp.inspection_id} complete!`, 'success');
+    openDetail(insp.inspection_id);
+  } catch (e) {
+    showToast('Inspection failed: ' + e.message, 'error');
+    document.getElementById('quick-quality-box').innerHTML = `<div class="alert alert-danger">Error: ${esc(e.message)}</div>`;
+  } finally {
+    btn.innerHTML = '🔬 Start AI Inspection';
+    btn.disabled = false;
+  }
+}
+
+function openNewInspectionModal() {
+  document.getElementById('new-product-name').value = '';
+  document.getElementById('new-brand-name').value = '';
+  document.getElementById('new-notes').value = '';
+  document.getElementById('new-is-demo').checked = false;
+  document.getElementById('new-demo-label').value = '';
+  document.getElementById('demo-label-group').classList.add('hidden');
+  openModal('modal-new-inspection');
+}
+
+async function createInspection() {
+  const productName = document.getElementById('new-product-name').value.trim();
+  const brandName = document.getElementById('new-brand-name').value.trim();
+  const category = document.getElementById('new-category').value;
+  const notes = document.getElementById('new-notes').value.trim();
+  const isDemo = document.getElementById('new-is-demo').checked;
+  const demoLabel = document.getElementById('new-demo-label').value.trim();
+  if (!productName) { showToast('Product name is required.', 'error'); return; }
+  const btn = document.getElementById('create-inspection-btn');
+  btn.innerHTML = '<span class="spinner"></span> Creating…'; btn.disabled = true;
+  try {
+    const insp = await apiFetch('/api/inspections', {
+      method: 'POST',
+      body: JSON.stringify({ product_name: productName, brand_name: brandName, product_category: category, notes, is_demo: isDemo, demo_label: demoLabel || null }),
+    });
+    closeModal('modal-new-inspection');
+    showToast(`Inspection ${insp.inspection_id} created.`, 'success');
+    openUploadModal(insp.inspection_id);
+  } catch (e) {
+    showToast('Failed to create: ' + e.message, 'error');
+  } finally {
+    btn.innerHTML = 'Create &amp; Upload Photo →'; btn.disabled = false;
+  }
+}
+
+function openUploadModal(inspectionId) {
+  currentInspectionId = inspectionId;
+  selectedFile = null; uploadedImageId = null;
+  document.getElementById('upload-inspection-id').textContent = inspectionId;
+  document.getElementById('upload-preview-box').classList.add('hidden');
+  document.getElementById('upload-quality-result').innerHTML = '';
+  document.getElementById('upload-quality-result').classList.add('hidden');
+  document.getElementById('analyze-btn').disabled = true;
+  openModal('modal-upload');
+}
+
+async function uploadImageForExistingInspection() {
+  const analyzeBtn = document.getElementById('analyze-btn');
+  const qualDiv = document.getElementById('upload-quality-result');
+  analyzeBtn.disabled = true; analyzeBtn.innerHTML = '<span class="spinner"></span> Assessing quality…';
+  qualDiv.innerHTML = ''; qualDiv.classList.remove('hidden');
+  try {
+    const form = new FormData();
+    form.append('file', selectedFile);
+    const qual = await apiFetch(`/api/inspections/${currentInspectionId}/upload`, {
+      method: 'POST', body: form, headers: {},
+    });
+    uploadedImageId = true;
+    renderQualityResult(qual, qualDiv);
+    analyzeBtn.disabled = false;
+    analyzeBtn.innerHTML = '🔬 Run AI Analysis';
+  } catch (e) {
+    qualDiv.innerHTML = `<div class="alert alert-danger">Upload failed: ${esc(e.message)}</div>`;
+    analyzeBtn.innerHTML = '🔬 Run AI Analysis';
+  }
+}
+
+function renderQualityResult(q, el) {
+  const rec = q.quality_recommendation;
+  const recClass = { GOOD: 'alert-success', ACCEPTABLE: 'alert-info', POOR: 'alert-warning', UNUSABLE: 'alert-danger' }[rec] || 'alert-info';
+  el.innerHTML = `
+    <div class="alert ${recClass}" style="flex-direction:column;gap:8px">
+      <div style="font-weight:700">📷 Image Quality: ${rec}</div>
+      <div style="font-size:12px;display:flex;flex-wrap:wrap;gap:12px;opacity:0.9">
+        <span>Score: <strong>${(q.quality_score*100).toFixed(1)}%</strong></span>
+        <span>Resolution: <strong>${q.width_px}×${q.height_px}px</strong> ${q.resolution_ok ? '✓' : '✗'}</span>
+        <span>Blur: ${q.blur_detected ? '⚠ Detected' : '✓ Clear'}</span>
+        <span>Contrast: ${q.contrast_ok ? '✓ Good' : '⚠ Low'}</span>
+        <span>Glare: ${q.glare_detected ? '⚠ Detected' : '✓ None'}</span>
+      </div>
+      <div style="font-size:12px;opacity:0.8">${esc(q.message)}</div>
+    </div>
+  `;
+}
+
+async function runAnalysis() {
+  if (!uploadedImageId) return;
+  const isImported = document.getElementById('is-imported-cb').checked;
+  const btn = document.getElementById('analyze-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Running OCR & Rules…';
+  renderProgressHud('upload-quality-result', 2, 3, 'Running AI Pipeline', 'Executing multi-pass OCR & statutory rule engine…');
+  try {
+    await apiFetch(`/api/inspections/${currentInspectionId}/analyze?is_imported=${isImported}`, { method: 'POST' });
+    closeModal('modal-upload');
+    showToast('Analysis complete.', 'success');
+    openDetail(currentInspectionId);
+  } catch (e) {
+    showToast('Analysis failed: ' + e.message, 'error');
+    btn.innerHTML = '🔬 Run AI Analysis'; btn.disabled = false;
+  }
+}
+
+let currentInspectionObj = null;
+let currentEvidenceList = [];
+
+async function openDetail(inspectionId) {
+  showPage('detail');
+  document.getElementById('topbar-title').textContent = 'Inspection: ' + inspectionId;
+  currentInspectionId = inspectionId;
+  const container = document.getElementById('detail-content');
+  container.innerHTML = `<div class="loading-overlay"><div class="spinner spinner-lg"></div><p class="text-muted">Loading…</p></div>`;
+  try {
+    const [insp, evidence] = await Promise.all([
+      apiFetch(`/api/inspections/${inspectionId}`),
+      apiFetch(`/api/inspections/${inspectionId}/evidence`).catch(() => []),
+    ]);
+    currentInspectionObj = insp;
+    currentEvidenceList = evidence || [];
+    renderDetail(insp, currentEvidenceList, container);
+  } catch (e) {
+    container.innerHTML = `<div class="alert alert-danger">Failed to load: ${esc(e.message)}</div>`;
+  }
+}
+
+function renderDetail(insp, evidence, container) {
+  const statusBadge = statusBadgeHtml(insp.status);
+  const date = insp.created_at ? new Date(insp.created_at).toLocaleString('en-IN') : '—';
+  const completedAt = insp.completed_at ? new Date(insp.completed_at).toLocaleString('en-IN') : '—';
+  const conf = insp.overall_confidence;
+
+  let demoHtml = '';
+  if (insp.is_demo) {
+    demoHtml = `<div class="demo-banner">⚗ CONTROLLED DEMO TEST CASE${insp.demo_label ? ' — ' + esc(insp.demo_label) : ''}</div>`;
+  }
+
+  let outcomeHtml = '';
+  if (insp.status === 'PASS') {
+    outcomeHtml = `<div class="alert alert-success">✅ <strong>PRELIMINARY ASSESSMENT: PASS</strong> — All applicable mandatory declarations detected with high confidence.</div>`;
+  } else if (insp.status === 'POTENTIAL_NON_COMPLIANCE') {
+    outcomeHtml = `<div class="alert alert-danger">🔴 <strong>PRELIMINARY ASSESSMENT: POTENTIAL NON-COMPLIANCE</strong> — One or more mandatory declarations are missing or insufficient. Physical inspection recommended.</div>`;
+  } else if (insp.status === 'MANUAL_REVIEW') {
+    outcomeHtml = `<div class="alert alert-warning">🟡 <strong>PRELIMINARY ASSESSMENT: MANUAL REVIEW REQUIRED</strong> — Extraction confidence or image clarity requires officer review.</div>`;
+  } else if (insp.status === 'DRAFT') {
+    outcomeHtml = `<div class="alert alert-info">📋 <strong>DRAFT</strong> — Image not yet uploaded. Capture or upload packaging image to run Legal Metrology compliance scan.</div>`;
+  }
+
+  // Declarations Table placed FIRST for immediate inspector visibility
+  let declHtml = '';
+  if (insp.declarations && insp.declarations.length) {
+    declHtml = `
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:24px;box-shadow:var(--shadow-sm)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+          <div>
+            <h3 style="font-size:16px;font-weight:700;color:var(--text-primary);display:flex;align-items:center;gap:8px">
+              🏷️ Extracted Statutory Declarations
+            </h3>
+            <p style="font-size:12px;color:var(--text-muted);margin-top:2px">
+              Extracted via multi-pass OCR & Statutory NLP Engine (Rule 6, PCR 2011)
+            </p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="reAnalyzeCurrent()">🔄 Re-Run Analysis</button>
+        </div>
+
+        <div class="table-wrap">
+          <table class="declarations-table">
+            <thead>
+              <tr>
+                <th style="width:22%">Declaration</th>
+                <th style="width:34%">Value & OCR Raw Evidence</th>
+                <th style="width:12%">Confidence</th>
+                <th style="width:18%">Compliance</th>
+                <th style="width:14%">Evidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${insp.declarations.map(d => `
+                <tr style="${d.status === 'FOUND' ? 'background:rgba(16,185,129,0.03)' : d.status === 'NOT_FOUND' ? 'background:rgba(239,68,68,0.03)' : ''}">
+                  <td class="decl-field" style="font-weight:700">
+                    ${fieldLabel(d.field)}
+                  </td>
+                  <td>
+                    <div style="font-size:13px;font-weight:600;color:${d.status==='FOUND' ? 'var(--text-primary)' : 'var(--text-muted)'}">
+                      ${esc(d.extracted_value || '— Not Detected in Label —')}
+                    </div>
+                    ${d.raw_ocr_text ? `
+                      <div style="font-family:var(--mono);font-size:11px;color:var(--text-muted);margin-top:4px;background:var(--bg-elevated);padding:3px 8px;border-radius:4px;display:inline-block">
+                        OCR Snippet: "${esc(d.raw_ocr_text)}"
+                      </div>
+                    ` : ''}
+                  </td>
+                  <td class="decl-conf" style="color:${d.extraction_confidence ? confColor(d.extraction_confidence) : 'var(--text-muted)'};font-weight:700">
+                    ${d.extraction_confidence != null && d.extraction_confidence > 0 ? (d.extraction_confidence*100).toFixed(0)+'%' : '—'}
+                  </td>
+                  <td>${statusDeclBadge(d.status)}</td>
+                  <td>
+                    <button class="btn btn-secondary btn-xs" onclick="viewEvidenceModal('${esc(d.field)}')">
+                      🔍 View Evidence
+                    </button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  } else {
+    declHtml = `
+      <div class="alert alert-info" style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:center">
+        <span>No declarations processed yet. Attach or capture an image to run analysis.</span>
+        <button class="btn btn-camera btn-sm" onclick="openUploadModal('${esc(insp.inspection_id)}')">📸 Capture / Upload Photo</button>
+      </div>
+    `;
+  }
+
+  let confHtml = '';
+  if (conf != null) {
+    confHtml = `
+      <div class="confidence-bar-wrap">
+        <h4>Prototype Compliance Confidence Score</h4>
+        <div class="conf-row">
+          <div class="conf-label">Overall Weighted Score</div>
+          <div class="conf-bar-bg"><div class="conf-bar" style="width:${(conf*100).toFixed(1)}%;background:${confColor(conf)}"></div></div>
+          <div class="conf-val" style="color:${confColor(conf)}">${(conf*100).toFixed(1)}%</div>
+        </div>
+        <p style="font-size:11px;color:var(--text-muted);margin-top:8px">
+          ⚠ This score is a composite metric combining multi-pass OCR confidence, extraction completeness, and statutory rule validation.
+        </p>
+      </div>
+    `;
+  }
+
+  const ruleHtml = (insp.rule_results && insp.rule_results.length) ? `
+    <div class="section-header"><h3>Statutory Rule Compliance Matrix</h3></div>
+    <div class="table-wrap" style="margin-bottom:24px">
+      <table>
+        <thead>
+          <tr>
+            <th>Rule ID</th>
+            <th>Declaration</th>
+            <th>Status</th>
+            <th>Severity</th>
+            <th>Legal Reference</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${insp.rule_results.map(r => `
+            <tr>
+              <td class="font-mono text-xs" style="color:var(--accent-light)">${esc(r.rule_id || '—')}</td>
+              <td style="font-weight:600">${fieldLabel(r.declaration_field)}</td>
+              <td>${statusDeclBadge(r.status)}</td>
+              <td><span class="badge ${r.severity === 'HIGH' ? 'badge-nc' : r.severity === 'MEDIUM' ? 'badge-mr' : 'badge-draft'}">${esc(r.severity || '—')}</span></td>
+              <td class="text-xs text-muted">${esc(r.legal_reference || '—')}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  ` : '';
+
+  container.innerHTML = `
+    ${demoHtml}
+    <div class="detail-header">
+      <div>
+        <div class="detail-id">${esc(insp.inspection_id)}</div>
+        <div style="font-size:20px;font-weight:800;margin-top:4px">${esc(insp.product_name || '—')}</div>
+        <div class="detail-meta">
+          <span>🏷 ${esc(insp.brand_name || '—')}</span>
+          <span>📦 ${catLabel(insp.product_category)}</span>
+          <span>📅 ${date}</span>
+          ${insp.completed_at ? `<span>✅ Analyzed: ${completedAt}</span>` : ''}
+        </div>
+      </div>
+      <div class="detail-actions">
+        ${statusBadge}
+        <button class="btn btn-camera btn-sm" onclick="openUploadModal('${esc(insp.inspection_id)}')">📸 Capture Image</button>
+        <button class="btn btn-secondary btn-sm" onclick="reAnalyzeCurrent()">🔄 Re-Analyze</button>
+        <button class="btn btn-secondary btn-sm" onclick="openReviewModal('${esc(insp.inspection_id)}')">✍ Review</button>
+        <a class="btn btn-primary btn-sm" href="${API}/api/inspections/${esc(insp.inspection_id)}/report.pdf?token=${authToken}" target="_blank">📄 PDF Report</a>
+      </div>
+    </div>
+    ${outcomeHtml}
+    <div class="info-grid">
+      <div class="info-item"><div class="info-label">Product Category</div><div class="info-value">${catLabel(insp.product_category)}</div></div>
+      <div class="info-item"><div class="info-label">Confidence Score</div><div class="info-value" style="color:${conf != null ? confColor(conf) : 'var(--text-muted)'}">${conf != null ? (conf*100).toFixed(1)+'%' : '—'}</div></div>
+      <div class="info-item"><div class="info-label">Declarations Detected</div><div class="info-value" style="color:var(--success)">${(insp.declarations||[]).filter(d=>d.status==='FOUND').length} / ${(insp.declarations||[]).filter(d=>d.status!=='NOT_APPLICABLE').length}</div></div>
+      <div class="info-item"><div class="info-label">Inspection ID</div><div class="info-value" style="font-family:var(--mono);font-size:13px">${esc(insp.inspection_id)}</div></div>
+    </div>
+    ${declHtml}
+    ${confHtml}
+    ${ruleHtml}
+    
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;margin-bottom:24px">
+      <details>
+        <summary style="cursor:pointer;font-weight:700;color:var(--accent-light);font-size:14px">
+          🔍 Inspect Raw Detected OCR Text Tokens &amp; Confidence
+        </summary>
+        <div id="ocr-tokens-container" style="margin-top:14px">
+          <div style="font-size:12px;color:var(--text-muted)">Loading OCR tokens…</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="disclaimer-banner">
+      <span class="disclaimer-icon">⚠</span>
+      <span><strong>Statutory Disclaimer:</strong> This is an AI-assisted preliminary assessment. All findings are subject to physical verification and final determination by an authorized officer under the Legal Metrology Act, 2009. This report does not constitute legal evidence or enforcement order.</span>
+    </div>
+  `;
+
+  // Load raw OCR tokens into accordion
+  loadOcrTokens(insp.inspection_id);
+}
+
+function viewEvidenceModal(field) {
+  if (!currentInspectionObj) return;
+  const d = (currentInspectionObj.declarations || []).find(x => x.field === field);
+  const r = (currentInspectionObj.rule_results || []).find(x => x.declaration_field === field);
+  const ev = (currentEvidenceList || []).find(x => x.declaration_field === field);
+
+  document.getElementById('evidence-modal-title').textContent = `🔍 Evidence: ${fieldLabel(field)}`;
+  const body = document.getElementById('evidence-modal-body');
+
+  const confVal = d && d.extraction_confidence != null ? `${(d.extraction_confidence * 100).toFixed(0)}%` : '—';
+  const confCls = d && d.extraction_confidence != null ? confColor(d.extraction_confidence) : 'var(--text-muted)';
+  const statusStr = d ? d.status : 'NOT_FOUND';
+  const legalRef = r ? r.legal_reference : 'Rule 6(1), Legal Metrology (Packaged Commodities) Rules, 2011';
+
+  let cropHtml = '';
+  if (ev && ev.crop_file_path) {
+    cropHtml = `
+      <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;text-align:center;margin-bottom:16px">
+        <img src="${API}/api/inspections/${esc(currentInspectionId)}/evidence/${esc(field)}/image?token=${authToken}" 
+             alt="Evidence Crop" 
+             style="max-width:100%;max-height:260px;border-radius:6px;object-fit:contain;box-shadow:var(--shadow-sm)"
+             onerror="this.style.display='none';document.getElementById('fallback-crop-box').style.display='block';" />
+        <div id="fallback-crop-box" style="display:none;font-size:12px;color:var(--text-muted);padding:16px">
+          📷 Package region highlighted in stored inspection tensor.
+        </div>
+      </div>
+    `;
+  } else {
+    cropHtml = `
+      <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;margin-bottom:16px;text-align:center">
+        <div style="font-size:28px;margin-bottom:6px">📦</div>
+        <div style="font-size:13px;font-weight:600;color:var(--text-primary)">
+          ${d && d.status === 'FOUND' ? 'Extracted from OCR Context' : 'Declaration Not Detected on Package'}
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:4px">
+          ${d && d.status === 'FOUND' ? 'Matched across multi-pass token fusion' : 'No matching text region identified in camera scan'}
+        </div>
+      </div>
+    `;
+  }
+
+  body.innerHTML = `
+    ${cropHtml}
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm)">
+        <span style="font-size:12px;color:var(--text-muted)">Statutory Field:</span>
+        <span style="font-weight:700;color:var(--text-primary)">${fieldLabel(field)}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm)">
+        <span style="font-size:12px;color:var(--text-muted)">Extracted Value:</span>
+        <span style="font-weight:700;color:var(--accent-light)">${esc(d?.extracted_value || '—')}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm)">
+        <span style="font-size:12px;color:var(--text-muted)">Compliance Status:</span>
+        <span>${statusDeclBadge(statusStr)}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm)">
+        <span style="font-size:12px;color:var(--text-muted)">Confidence:</span>
+        <span style="font-weight:700;color:${confCls}">${confVal}</span>
+      </div>
+      ${d?.raw_ocr_text ? `
+        <div style="padding:10px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm)">
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">Raw OCR Evidence:</div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--text-primary);word-break:break-all">"${esc(d.raw_ocr_text)}"</div>
+        </div>
+      ` : ''}
+      <div style="padding:10px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm)">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:2px">Legal Reference:</div>
+        <div style="font-size:12px;color:var(--text-secondary)">${esc(legalRef)}</div>
+      </div>
+    </div>
+  `;
+
+  openModal('modal-evidence');
+}
+
+async function loadOcrTokens(inspectionId) {
+  try {
+    const tokens = await apiFetch(`/api/inspections/${inspectionId}/ocr`);
+    const container = document.getElementById('ocr-tokens-container');
+    if (!container) return;
+    if (!tokens || tokens.length === 0) {
+      container.innerHTML = '<div style="font-size:12px;color:var(--text-muted)">No OCR text tokens stored for this image.</div>';
+      return;
+    }
+    container.innerHTML = `
+      <div style="display:flex;flex-wrap:wrap;gap:8px;max-height:260px;overflow-y:auto;padding:8px;background:var(--bg-elevated);border-radius:var(--radius-md)">
+        ${tokens.map(t => `
+          <span style="font-family:var(--mono);font-size:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:4px 8px;display:inline-flex;align-items:center;gap:6px">
+            <span style="color:var(--text-primary)">${esc(t.text)}</span>
+            <span style="font-size:10px;color:${confColor(t.confidence)};font-weight:700">${(t.confidence*100).toFixed(0)}%</span>
+          </span>
+        `).join('')}
+      </div>
+    `;
+  } catch (e) {
+    const container = document.getElementById('ocr-tokens-container');
+    if (container) container.innerHTML = '<div style="font-size:12px;color:var(--text-muted)">Could not load OCR tokens.</div>';
+  }
+}
+
+async function reAnalyzeCurrent() {
+  if (!currentInspectionId) return;
+  showToast('Re-running multi-pass OCR & Legal Metrology analysis…', 'info');
+  try {
+    await apiFetch(`/api/inspections/${currentInspectionId}/analyze`, { method: 'POST' });
+    showToast('Analysis complete! Updated declarations loaded.', 'success');
+    openDetail(currentInspectionId);
+  } catch (e) {
+    showToast('Analysis error: ' + e.message, 'error');
+  }
+}
+
+function openReviewModal(inspectionId) {
+  currentInspectionId = inspectionId;
+  selectedReview = null;
+  document.getElementById('review-inspection-id').textContent = inspectionId;
+  document.getElementById('review-notes').value = '';
+  document.getElementById('review-flags').value = '';
+  ['confirmed','overridden','rejected'].forEach(r => {
+    document.getElementById(`rev-${r}`).className = 'review-option';
+  });
+  openModal('modal-review');
+}
+
+function selectReview(decision) {
+  selectedReview = decision;
+  ['confirmed','overridden','rejected'].forEach(r => {
+    const el = document.getElementById(`rev-${r}`);
+    el.className = 'review-option';
+    if (r.toUpperCase() === decision) el.classList.add(`selected-${r}`);
+  });
+}
+
+async function submitReview() {
+  if (!selectedReview) { showToast('Please select a review decision.', 'error'); return; }
+  const notes = document.getElementById('review-notes').value.trim();
+  const flagsRaw = document.getElementById('review-flags').value.trim();
+  const flags = flagsRaw ? flagsRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+  const btn = document.getElementById('submit-review-btn');
+  btn.innerHTML = '<span class="spinner"></span> Submitting…'; btn.disabled = true;
+  try {
+    await apiFetch(`/api/inspections/${currentInspectionId}/review`, {
+      method: 'POST',
+      body: JSON.stringify({ decision: selectedReview, statutory_notes: notes || null, flagged_declarations: flags }),
+    });
+    closeModal('modal-review');
+    showToast('Manual review submitted.', 'success');
+    openDetail(currentInspectionId);
+  } catch (e) {
+    showToast('Failed to submit: ' + e.message, 'error');
+  } finally {
+    btn.innerHTML = 'Submit Review'; btn.disabled = false;
+  }
+}
+
+async function loadRules() {
+  const el = document.getElementById('rules-list');
+  el.innerHTML = `<div class="loading-overlay"><div class="spinner spinner-lg"></div></div>`;
+  try {
+    const rules = await apiFetch('/api/rules');
+    const list = Array.isArray(rules) ? rules : (rules.rules || Object.values(rules));
+    el.innerHTML = list.map(r => `
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-left:3px solid ${r.severity === 'HIGH' ? 'var(--danger)' : r.severity === 'MEDIUM' ? 'var(--warning)' : 'var(--info)'};border-radius:var(--radius-md);padding:14px 16px;margin-bottom:10px">
+        <div style="font-family:var(--mono);font-size:11px;color:var(--accent-light);font-weight:600">${esc(r.rule_id || '')}</div>
+        <div style="font-size:15px;font-weight:700;color:var(--text-primary);margin:4px 0">${esc(r.declaration || r.declaration_field || '')}</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.5">${esc(r.requirement || '')}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+          <span style="font-size:11px;color:var(--text-muted);background:var(--bg-elevated);padding:2px 8px;border-radius:10px">⚖ ${esc(r.legal_reference || '')}</span>
+          ${r.severity ? `<span style="font-size:11px;color:var(--text-muted);background:var(--bg-elevated);padding:2px 8px;border-radius:10px">Severity: ${esc(r.severity)}</span>` : ''}
+          ${r.applicability ? `<span style="font-size:11px;color:var(--text-muted);background:var(--bg-elevated);padding:2px 8px;border-radius:10px">📦 ${esc(r.applicability)}</span>` : ''}
+        </div>
+      </div>
+    `).join('');
+  } catch (e) {
+    el.innerHTML = `<div class="alert alert-danger">Failed to load rules: ${esc(e.message)}</div>`;
+  }
+}
+
+function esc(s) {
+  if (s == null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function statusBadgeHtml(status) {
+  const map = {
+    PASS: ['badge-pass','✓ PASS'],
+    POTENTIAL_NON_COMPLIANCE: ['badge-nc','⚠ NON-COMPLIANCE'],
+    MANUAL_REVIEW: ['badge-mr','🔄 MANUAL REVIEW'],
+    DRAFT: ['badge-draft','✏ DRAFT'],
+    PROCESSING: ['badge-processing','⚙ PROCESSING'],
+  };
+  const [cls, label] = map[status] || ['badge-draft', status || '—'];
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+
+function statusDeclBadge(status) {
+  const map = {
+    FOUND: ['badge-found','✓ DETECTED'],
+    DETECTED: ['badge-found','✓ DETECTED'],
+    PASS: ['badge-pass','✓ PASS'],
+    NOT_FOUND: ['badge-not_found','✗ NOT DETECTED'],
+    NOT_APPLICABLE: ['badge-na','— N/A'],
+    UNCERTAIN: ['badge-uncertain','⚠ UNCERTAIN'],
+    MANUAL_REVIEW: ['badge-manual_review','👁 REVIEW'],
+    POTENTIAL_NON_COMPLIANCE: ['badge-nc','⚠ NON-COMPLIANT'],
+  };
+  const [cls, label] = map[status] || ['badge-draft', status || '—'];
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+
+function catLabel(cat) {
+  const m = { packaged_food: 'Packaged Food', cosmetics: 'Cosmetics', household_commodity: 'Household' };
+  return m[cat] || (cat || '—');
+}
+
+function fieldLabel(f) {
+  const m = {
+    MRP: 'MRP (Max. Retail Price)',
+    NET_QUANTITY: 'Net Quantity',
+    MANUFACTURER_PACKER_IMPORTER: 'Manufacturer / Packer / Importer',
+    COMMON_GENERIC_NAME: 'Generic / Commodity Name',
+    MONTH_YEAR_OF_MANUFACTURE: 'Date of Mfg. / Packing',
+    BEST_BEFORE_EXPIRY_DATE: 'Best Before / Use By / Expiry',
+    CONSUMER_CARE_DETAILS: 'Consumer Care Details',
+    UNIT_SALE_PRICE: 'Unit Sale Price (USP)',
+    COUNTRY_OF_ORIGIN: 'Country of Origin',
+    DIMENSIONS: 'Dimensions / Size',
+    DIMENSIONS_SIZE: 'Dimensions / Size',
+    LICENSE_NUMBER: 'License / FSSAI Number',
+  };
+  return m[f] || (f || '—');
+}
+
+function confColor(v) {
+  if (v >= 0.75) return 'var(--success)';
+  if (v >= 0.50) return 'var(--warning)';
+  return 'var(--danger)';
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
+
+function showToast(msg, type = 'info') {
+  const c = document.getElementById('toast-container');
+  const icon = { success: '✓', error: '✗', info: 'ℹ' }[type] || 'ℹ';
+  const el = document.createElement('div');
+  el.className = `toast toast-${type === 'error' ? 'error' : type === 'success' ? 'success' : 'info'}`;
+  el.innerHTML = `<span>${icon}</span><span>${esc(msg)}</span>`;
+  c.appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+</script>
+</body>
+</html>

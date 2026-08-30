@@ -1,0 +1,83 @@
+# ── Python ─────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# ── Environment & Secrets ─────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.cert
+*.crt
+
+# ── Databases ─────────────────────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+legalmet_ai.db
+
+# ── Runtime Storage (keep directory structure, ignore dynamic uploads/reports)
+data/uploads/*
+!data/uploads/.gitkeep
+data/reports/*
+!data/reports/.gitkeep
+
+# ── Node.js & Frontend ────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+frontend/dist/
+frontend/build/
+.parcel-cache/
+
+# ── Mobile / Flutter (if applicable) ──────────────────────────────────
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+
+# ── AI / OCR Local Model Caches ───────────────────────────────────────
+.paddleocr/
+.EasyOCR/
+weights/
+*.onnx
+*.pdmodel
+*.pdiparams
+
+# ── Temporary & Scratch Files ─────────────────────────────────────────
+scratch/
+tmp/
+temp/
+*.log
+logs/
+
+# ── IDEs & Operating System ───────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+.DS_Store
+Thumbs.db
+Desktop.ini
