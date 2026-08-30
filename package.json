@@ -1,0 +1,23 @@
+{
+  "name": "legalmet-ai-frontend",
+  "version": "1.0.0",
+  "description": "LEGALMET AI — Legal Metrology Compliance Inspection Platform Inspector Portal (SIH26034)",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve -s . -l 3000",
+    "start": "npx serve -s . -l 3000",
+    "serve": "npx http-server . -p 3000 -c-1"
+  },
+  "keywords": [
+    "legal-metrology",
+    "compliance",
+    "ai-inspection",
+    "ocr",
+    "sih26034"
+  ],
+  "author": "Department of Consumer Affairs / SIH Team",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}
