@@ -241,26 +241,25 @@ class PaddleOCRProvider(OCRProvider):
 def create_ocr_provider(provider_name: Optional[str] = None) -> OCRProvider:
     """
     Factory function to instantiate the configured or requested OCR provider.
-    Fallback chain: requested provider → EasyOCR → Mock.
+    Primary priority: PaddleOCR -> EasyOCR -> Mock fallback.
     """
-    name = (provider_name or settings.ocr_provider or "auto").lower().strip()
+    name = (provider_name or settings.ocr_provider or "paddleocr").lower().strip()
 
-    if name in ("paddle", "paddleocr"):
+    # 1. Primary: PaddleOCR (DB/DB++ detection + angle classification + CRNN recognition)
+    if name in ("paddle", "paddleocr", "auto"):
         provider = PaddleOCRProvider()
         if provider.initialize():
             return provider
+        # Fall back to EasyOCR if PaddleOCR is not installed in current Python env
         name = "easyocr"
 
-    if name in ("easy", "easyocr", "auto"):
+    # 2. Fallback: EasyOCR (CRAFT detector + ResNet recognizer)
+    if name in ("easy", "easyocr"):
         provider = EasyOCRProvider()
         if provider.initialize():
             return provider
 
-    if name == "auto":
-        paddle_prov = PaddleOCRProvider()
-        if paddle_prov.initialize():
-            return paddle_prov
-
+    # 3. Fallback: Deterministic Mock (for testing or zero-dependency environments)
     mock = MockOCRProvider()
     mock.initialize()
     return mock

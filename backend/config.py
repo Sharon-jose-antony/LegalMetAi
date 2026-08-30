@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     iq_glare_threshold: float = 0.08     # Fraction of very bright pixels; above = glare
 
     # ── OCR ───────────────────────────────────────────────────────────────────
-    ocr_provider: str = "auto"           # "auto" | "paddleocr" | "easyocr" | "mock"
+    ocr_provider: str = "paddleocr"      # "paddleocr" (primary) | "easyocr" | "auto" | "mock"
     ocr_languages: str = "en"
     ocr_min_confidence: float = 0.30
 
