@@ -1053,9 +1053,17 @@ function getInitialApiUrl() {
     if (stored && stored.trim()) return stored.trim().replace(/\/+$/, '');
   } catch (e) {}
   if (window.__API_URL__) return window.__API_URL__.trim().replace(/\/+$/, '');
-  if (window.location.hostname.endsWith('github.io') || window.location.protocol === 'file:') {
+  const h = window.location.hostname;
+  const isLocal = h === 'localhost' || h === '127.0.0.1' || h.startsWith('192.168.') || h.startsWith('10.') || h.startsWith('172.');
+
+  // If on external static host (Vercel, GitHub Pages, Netlify, custom domain, etc.) or local file
+  if (!isLocal || window.location.protocol === 'file:') {
+    if (h === 'legalmetai.onrender.com') {
+      return window.location.origin;
+    }
     return DEFAULT_REMOTE_API;
   }
+
   if (window.location.port === '3000') {
     return `${window.location.protocol}//${window.location.hostname}:8000`;
   }
