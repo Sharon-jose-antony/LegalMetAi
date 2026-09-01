@@ -17,4 +17,3 @@ python-jose[cryptography]>=3.3.0
 pytest>=8.0.0
 httpx>=0.27.0
 aiofiles>=23.0.0
-
