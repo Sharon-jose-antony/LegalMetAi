@@ -50,16 +50,16 @@ def _to_numpy_rgb(image: Image.Image | np.ndarray) -> np.ndarray:
 
 def detect_and_upscale(
     img_rgb: np.ndarray,
-    target_long_edge: int = 1800,
+    target_long_edge: int = 1600,
     min_scale: float = 0.25,
     max_scale: float = 4.0,
 ) -> Tuple[np.ndarray, float]:
     """
     Detects input image resolution:
-    - Low-resolution images (<1400px): Automatically upscales 2x–4x using Lanczos4 interpolation.
+    - Low-resolution images (<1000px): Automatically upscales 3x–4x using Lanczos4 interpolation.
     - Ultra-high resolution photos from phone cameras (>1920px, e.g. 4000x3000):
-      Downscales to 1800px with antialiased Lanczos4 interpolation for 5x–10x faster OCR.
-    - Normal resolution (1400px - 1920px): Preserved as-is (1.0x).
+      Downscales with antialiased Lanczos4 interpolation for fast OCR.
+    - Normal resolution (1200px - 1920px): Preserved as-is (1.0x).
 
     Parameters:
         img_rgb: Input RGB image as numpy array (H, W, 3).
@@ -76,16 +76,16 @@ def detect_and_upscale(
 
     # Determine adaptive scaling factor
     if long_edge < 800 or short_edge < 500:
-        # Very low resolution (e.g. 500x337): upscale 3x - 4x
+        # Low resolution (e.g. 500x337): upscale 3x - 4x for crystal clear small font recognition
         scale = max(3.0, min(max_scale, target_long_edge / float(long_edge)))
-    elif long_edge < 1400 or short_edge < 900:
-        # Medium-low resolution: upscale 1.5x - 2.5x
-        scale = max(1.5, min(3.0, target_long_edge / float(long_edge)))
+    elif long_edge < 1200 or short_edge < 800:
+        # Medium-low resolution: upscale 1.4x - 2.0x
+        scale = max(1.4, min(2.5, target_long_edge / float(long_edge)))
     elif long_edge > 1920:
-        # High-res mobile camera photo (e.g. 4032x3024): downscale to ~1800px for speed
+        # High-res mobile camera photo (e.g. 4032x3024): downscale to ~1600px for speed
         scale = max(min_scale, target_long_edge / float(long_edge))
     else:
-        # Optimal resolution (1400 - 1920px): 1.0 (no scaling needed)
+        # Optimal resolution: 1.0 (no scaling needed)
         scale = 1.0
 
     scale = round(scale, 3)

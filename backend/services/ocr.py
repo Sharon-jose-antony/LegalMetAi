@@ -113,7 +113,14 @@ class EasyOCRProvider(OCRProvider):
         threshold = min_confidence if min_confidence is not None else self._min_conf
 
         try:
-            results = self._reader.readtext(image_np, detail=1, paragraph=False)  # type: ignore
+            results = self._reader.readtext(
+                image_np,
+                detail=1,
+                paragraph=False,
+                batch_size=8,
+                canvas_size=1280,
+                mag_ratio=1.0,
+            )  # type: ignore
         except Exception as e:
             print(f"[EasyOCRProvider] OCR error: {e}")
             return []
@@ -332,34 +339,24 @@ def run_multi_pass_ocr(
             scale_factor = float(preprocess_result.scale_factor)
         if hasattr(preprocess_result, "variants") and preprocess_result.variants:
             variants = preprocess_result.variants
-            # Prioritize complementary feature enhancements (original, CLAHE, contrast, binarization)
-            for v_name in ["original", "clahe", "contrast_enhanced", "adaptive_threshold"]:
+            # Prioritize complementary feature enhancements (original and CLAHE)
+            for v_name in ["original", "clahe"]:
                 if v_name in variants and variants[v_name] is not None:
                     passes.append((variants[v_name], v_name))
 
     if not passes and variants_dict:
-        for v_name, v_img in variants_dict.items():
-            if v_img is not None:
-                passes.append((v_img, v_name))
+        for v_name in ["original", "clahe"]:
+            if v_name in variants_dict and variants_dict[v_name] is not None:
+                passes.append((variants_dict[v_name], v_name))
 
     if not passes:
         # Build passes from explicit arguments
         if original is not None:
             passes.append((original, "original"))
-        if grayscale is not None:
-            passes.append((grayscale, "grayscale"))
         if enhanced_clahe is not None:
             passes.append((enhanced_clahe, "clahe"))
-        if contrast_enhanced is not None:
-            passes.append((contrast_enhanced, "contrast_enhanced"))
-        if sharpened is not None:
-            passes.append((sharpened, "sharpened"))
-        if adaptive_threshold is not None:
-            passes.append((adaptive_threshold, "adaptive_threshold"))
-        elif high_contrast is not None:
-            passes.append((high_contrast, "high_contrast"))
-        if dot_matrix_enhanced is not None:
-            passes.append((dot_matrix_enhanced, "dot_matrix_enhanced"))
+        elif grayscale is not None:
+            passes.append((grayscale, "grayscale"))
 
     all_raw_candidates: List[OCRToken] = []
     passes_used: List[str] = []
@@ -385,6 +382,13 @@ def run_multi_pass_ocr(
                         for p in tok.polygon
                     ]
             all_raw_candidates.append(tok)
+
+        # Fast path: if the primary pass already found abundant tokens,
+        # skip subsequent passes for sub-10-second inspection speed
+        if pass_name == "original" and len(tokens) >= 10:
+            high_conf_count = sum(1 for t in tokens if t.confidence >= 0.45)
+            if high_conf_count >= 8:
+                break
 
     # Deduplicate overlapping/near-identical text using bounding boxes and text similarity
     deduped = _deduplicate_tokens(all_raw_candidates)
