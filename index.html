@@ -553,6 +553,14 @@
       </button>
     </form>
 
+    <div style="text-align:center;margin:12px 0 4px 0;">
+      <button type="button" class="btn-ghost btn-sm" onclick="promptChangeApiServer()" style="font-size:11px;color:var(--text-secondary);cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;border:1px solid var(--border);">
+        <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--success);"></span>
+        <span>Backend: <strong id="login-api-label" style="color:var(--accent-light);font-family:var(--mono);">https://legalmetai.onrender.com</strong></span>
+        <span>⚙</span>
+      </button>
+    </div>
+
     <div class="auth-disclaimer">
       <strong>⚠ Statutory Notice:</strong> This AI-assisted system provides preliminary compliance assessment only. Final statutory determination and enforcement action remains with the authorized officer under the Legal Metrology Act, 2009.
     </div>
@@ -616,6 +624,11 @@
       <button class="mobile-menu-toggle" onclick="toggleSidebar(true)">☰</button>
       <span class="topbar-title" id="topbar-title">Dashboard</span>
       <div class="topbar-actions">
+        <button class="btn btn-ghost btn-sm" onclick="promptChangeApiServer()" title="Click to change Backend API URL" style="font-size:11px;color:var(--text-secondary);display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:20px;padding:4px 10px;">
+          <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--success);"></span>
+          <span id="topbar-api-label" style="font-family:var(--mono);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">legalmetai.onrender.com</span>
+          <span style="font-size:10px;opacity:0.6;">⚙</span>
+        </button>
         <button class="btn btn-camera btn-sm" onclick="openQuickCaptureModal()">
           📸 Capture Product
         </button>
@@ -1025,7 +1038,31 @@
      JAVASCRIPT
 ══════════════════════════════════════════════════════════════════════ -->
 <script>
-const API = (window.__API_URL__ || window.location.origin);
+const DEFAULT_REMOTE_API = 'https://legalmetai.onrender.com';
+
+function getInitialApiUrl() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const paramApi = params.get('api');
+    if (paramApi) {
+      const clean = paramApi.trim().replace(/\/+$/, '');
+      localStorage.setItem('legalmet_api_url', clean);
+      return clean;
+    }
+    const stored = localStorage.getItem('legalmet_api_url');
+    if (stored && stored.trim()) return stored.trim().replace(/\/+$/, '');
+  } catch (e) {}
+  if (window.__API_URL__) return window.__API_URL__.trim().replace(/\/+$/, '');
+  if (window.location.hostname.endsWith('github.io') || window.location.protocol === 'file:') {
+    return DEFAULT_REMOTE_API;
+  }
+  if (window.location.port === '3000') {
+    return `${window.location.protocol}//${window.location.hostname}:8000`;
+  }
+  return window.location.origin;
+}
+
+let API = getInitialApiUrl();
 let authToken = null;
 let currentUser = null;
 let allInspections = [];
@@ -1035,6 +1072,28 @@ let uploadedImageId = null;
 let selectedReview = null;
 let activeUploadTarget = 'existing'; // 'existing' | 'quick'
 let networkInfo = null;
+
+function updateApiBadges() {
+  const cleanUrl = API.replace(/^https?:\/\//, '');
+  const loginEl = document.getElementById('login-api-label');
+  if (loginEl) loginEl.textContent = API;
+  const topbarEl = document.getElementById('topbar-api-label');
+  if (topbarEl) topbarEl.textContent = cleanUrl;
+}
+
+function promptChangeApiServer() {
+  const next = window.prompt("Set Backend API URL:\n\nDefault Render Backend: https://legalmetai.onrender.com\nLocal Dev Backend: http://localhost:8000", API);
+  if (next && next.trim()) {
+    const clean = next.trim().replace(/\/+$/, '');
+    try { localStorage.setItem('legalmet_api_url', clean); } catch (e) {}
+    API = clean;
+    updateApiBadges();
+    showToast(`Backend set to: ${clean}`, 'success');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', updateApiBadges);
+setTimeout(updateApiBadges, 100);
 
 function fillAndLogin(user, pass) {
   document.getElementById('login-username').value = user;
